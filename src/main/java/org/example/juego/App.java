@@ -1,4 +1,4 @@
-package org.example;
+package org.example.juego;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,14 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-/**
- * Hello world!
- *
- */
-public class App extends Application
-{
+public class App extends Application {
+
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         var label = new Label("Hello que tal");
         var scene = new Scene(new StackPane(label), 640, 480);
         stage.setScene(scene);
@@ -21,6 +17,6 @@ public class App extends Application
     }
 
     public static void main(String[] args){
-        Application.launch();
+        launch();
     }
 }
