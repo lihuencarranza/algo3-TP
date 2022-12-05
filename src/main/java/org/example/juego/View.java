@@ -12,6 +12,7 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 
 public class View {
+    private Button smile;
     private Button buttons[][];
     private GridPane grid;
     private Scene s;
@@ -27,7 +28,7 @@ public class View {
     }
 
     private Parent createContent() {
-
+        smile = new Button();
 
 
         grid = new GridPane();
@@ -36,9 +37,11 @@ public class View {
                 Button button = new Button();
                 button.setMinWidth(35);
                 button.setMinHeight(35);
+                button.setOnAction(actionEvent ->  {
+                    button.setDisable(true);
+                });
                 GridPane.setFillWidth(button, true);
                 grid.add(button, i, j);
-
             }
         }
 
