@@ -1,5 +1,6 @@
 package org.example.juego;
 
+import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,16 +22,23 @@ public class View {
         stage.setScene(s);
         stage.setTitle("Minesweeper");
         stage.getIcons().add(new Image("https://cdn-icons-png.flaticon.com/512/595/595582.png"));
-
+        stage.setResizable(false);
         stage.show();
     }
 
     private Parent createContent() {
 
+
+
         grid = new GridPane();
         for (int j = 0; j < 10; j++){
             for (int i= 0; i<10; i++){
-                grid.add(new Button("0"), i, j);
+                Button button = new Button();
+                button.setMinWidth(35);
+                button.setMinHeight(35);
+                GridPane.setFillWidth(button, true);
+                grid.add(button, i, j);
+
             }
         }
 
