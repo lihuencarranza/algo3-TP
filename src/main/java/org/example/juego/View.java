@@ -27,20 +27,14 @@ public class View {
 
     private Parent createContent() {
 
-        buttons = new Button[10][10];
         grid = new GridPane();
-        tilePane = new TilePane();
-        SplitPane splitPane = new SplitPane(tilePane, grid);
-
-
-
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < 10; j++){
-                buttons[j][i] = new Button();
-                buttons[j][i].prefWidthProperty().bind(grid.widthProperty());
-                buttons[j][i].prefHeightProperty().bind(grid.heightProperty());
+        for (int j = 0; j < 10; j++){
+            for (int i= 0; i<10; i++){
+                grid.add(new Button("0"), i, j);
             }
         }
-        return new Pane(splitPane);
+
+
+        return grid;
     }
 }
