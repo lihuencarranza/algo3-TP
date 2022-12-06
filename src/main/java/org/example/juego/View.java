@@ -8,17 +8,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class View {
     private final Model model;
-    private Stage stage1;
+    private Stage stage;
     private Scene scene1;
     private Button startButton;
     private Button rulesButton;
-    private Stage stage2;
+
     private Scene scene2;
     private GridPane grid;
     private Button smileButton;
@@ -32,28 +35,25 @@ public class View {
 
     public View(Stage stage, Model model){
         this.model = model;
+        this.stage = stage;
         stage.setTitle(model.getTitleApp());
+        stage.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
+        stage.setResizable(false);
 
-        stage1 = createInitialStage();
-        stage2 = createGameStage();
+        scene1 = createInitialScene();
+        scene2 = createGameScene();
 
+        stage.setScene(scene1);
 
-        stage1.show();
+        stage.show();
     }
-    private Stage createInitialStage() {
-        stage1 = new Stage();
-        stage1.setTitle(model.getTitleApp());
-        stage1.setResizable(false);
-        stage1.getIcons().add(new Image("https://cdn-icons-png.flaticon.com/512/595/595582.png"));
-
-
+    private Scene createInitialScene() {
 
         startButton = new Button("start");
         startButton.setMinHeight(50);
         startButton.setMinWidth(100);
         startButton.setOnAction(e -> {
-                stage2.show();
-                stage1.close();
+                switchScenes(scene2);
         });
         rulesButton = new Button("rules");
         rulesButton.setMinHeight(50);
@@ -64,44 +64,69 @@ public class View {
         VBox vBox = new VBox(label, startButton, rulesButton);
         vBox.setSpacing(30);
         vBox.setAlignment(Pos.CENTER);
-        scene1 = new Scene(vBox,300,300);
-        stage1.setScene(scene1);
-        return stage1;
+        scene1 = new Scene(vBox,350,425);
+        return scene1;
     }
-    private Stage createGameStage() {
-        stage2 = new Stage();
 
-        stage2.setTitle(model.getTitleApp());
-        stage2.setResizable(false);
-        stage2.getIcons().add(new Image("https://cdn-icons-png.flaticon.com/512/595/595582.png"));
-
-        smileButton = new Button();
+    private void setSmileButton(Button smileButton){
         smileButton.setMinWidth(50);
         smileButton.setMinHeight(50);
+        Image smileIcon = new Image("file:src/main/java/org/example/juego/resources/smile.png");
+        ImageView smileImgView = new ImageView(smileIcon);
+        smileImgView.setFitHeight(50);
+        smileImgView.setPreserveRatio(true);
+        smileButton.setGraphic(smileImgView);
 
-        grid = new GridPane();
+        smileButton.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                scene2 = createGameScene();
+                switchScenes(scene2);
+            }
+        });
+    }
 
+    private void setGrid(GridPane grid){
         for (int i = 0; i < 10; i++){
             for (int j=0; j < 10; j++){
                 Button button = new Button();
                 button.setMinWidth(35);
                 button.setMinHeight(35);
+                button.setOnAction(actionEvent ->
+                {
+                    button.setDisable(true);
+                });
                 grid.add(button, i, j);
             }
         }
-
-        VBox vbox = new VBox(smileButton, grid);
-        scene2 = new Scene(vbox);
-        stage2.setScene(scene2);
-
-        return stage2;
     }
 
-    private Stage createRules(){
-        return stage1;
+    private Scene createGameScene() {
+
+        smileButton = new Button();
+        setSmileButton(smileButton);
+
+        grid = new GridPane();
+        setGrid(grid);
+
+        HBox hBox = new HBox(smileButton);
+        hBox.setAlignment(Pos.CENTER);
+
+        VBox vBox = new VBox(hBox, grid);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(15);
+        scene2 = new Scene(vBox);
+
+        return scene2;
     }
-    public void recordListen(EventHandler<ActionEvent> actionEventEventHandler) {
+
+    private Scene createRules(){
+        return scene1;
     }
+
+    public void switchScenes(Scene scene) {
+        stage.setScene(scene);
+    }
+
 
 
 
