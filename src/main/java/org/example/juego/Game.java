@@ -6,7 +6,7 @@ import org.example.juego.Boxes.Box;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Game {
+public class Game{
 
     public boolean gameOver = false;
     public Board board;
@@ -63,4 +63,6 @@ public class Game {
 
 
     }
+
+
 }
