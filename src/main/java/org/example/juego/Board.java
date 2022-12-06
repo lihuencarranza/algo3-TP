@@ -74,8 +74,8 @@ public class Board {
         }
 
 
-        for (int j = colStart; j <= colEnd; j++) {
-            for (int i = rowStart; i <= rowEnd; i++) {
+        for  (int i = rowStart; i <= rowEnd; i++){
+            for (int j = colStart; j <= colEnd; j++) {
                 if (matrix[i][j] == null) {
                     matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.BOX, 1);
                 } else if (!matrix[i][j].bomb) {
@@ -89,8 +89,8 @@ public class Board {
 
 
     private void createEmptyBoxes(){
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows; i++) {
+            for  (int j = 0; j < columns; j++){
                 if (matrix[i][j] == null) {
                     matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.BOX, 0);
                 }
@@ -99,8 +99,8 @@ public class Board {
     }
 
     public void printBoard() {
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 matrix[i][j].printBox();
             }
             System.out.println();
@@ -137,8 +137,8 @@ public class Board {
             rowEnd = columns-1;
         }
 
-        for (int j = colStart; j <= colEnd; j++) {
-            for (int i = rowStart; i <= rowEnd; i++) {
+        for (int i = rowStart; i <= rowEnd; i++) {
+            for (int j = colStart; j <= colEnd; j++) {
                 if (matrix[i][j].number == 0 && !matrix[i][j].visible) {
                     matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.CLICK, matrix[i][j].number);
                     clickNeighbours(i, j);
