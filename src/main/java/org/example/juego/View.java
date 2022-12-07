@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 public class View {
     private final Model model;
+    private Controller controller;
+
     private Stage stage;
     private Scene scene1;
     private Button startButton;
@@ -33,8 +35,9 @@ public class View {
     private Scene s;
     private TilePane tilePane;*/
 
-    public View(Stage stage, Model model){
+    public View(Stage stage, Model model, Controller controller){
         this.model = model;
+        this.controller = controller;
         this.stage = stage;
         stage.setTitle(model.getTitleApp());
         stage.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
@@ -47,17 +50,29 @@ public class View {
 
         stage.show();
     }
+
+    private Button setStartButton(){
+        Button b = new Button("start");
+        b.setMinHeight(50);
+        b.setMinWidth(100);
+        b.setOnAction(e -> {
+            switchScenes(scene2);
+            controller.startGame();
+        });
+        return b;
+    }
+
+    private Button setRulesButton(){
+        Button b = new Button("rules");
+        b.setMinHeight(50);
+        b.setMinWidth(100);
+        return b;
+    }
     private Scene createInitialScene() {
 
-        startButton = new Button("start");
-        startButton.setMinHeight(50);
-        startButton.setMinWidth(100);
-        startButton.setOnAction(e -> {
-                switchScenes(scene2);
-        });
-        rulesButton = new Button("rules");
-        rulesButton.setMinHeight(50);
-        rulesButton.setMinWidth(100);
+        startButton = setStartButton();
+        rulesButton = setRulesButton();
+
 
         Label label = new Label(model.getTitleApp());
 
@@ -78,23 +93,43 @@ public class View {
         smileButton.setGraphic(smileImgView);
 
         smileButton.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
                 scene2 = createGameScene();
                 switchScenes(scene2);
-            }
+                controller.startGame();
         });
+    }
+
+    private void setButtonInGridEvents(Button button, int row, int col){
+
+        button.setOnMouseClicked(event -> {
+            //caso click derecho y no tiene bandera
+            if (event.getButton() == MouseButton.SECONDARY && !controller.isFlaged(row, col)){
+                Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
+                ImageView flagImgView = new ImageView(flagIcon);
+                flagImgView.setFitWidth(19);
+                flagImgView.setFitHeight(20);
+                button.setGraphic(flagImgView);
+                controller.setFlag(row, col);
+                System.out.println("Flag: " + row + ", " + col);
+
+            }/*else if(event.getButton() == MouseButton.SECONDARY){
+                button.setGraphic(null);
+                controller.setFlag(row, col);
+            }*/
+        });
+    }
+    private void setButtonInGrid(Button button, int row, int col){
+        button.setMinWidth(35);
+        button.setMinHeight(35);
+        setButtonInGridEvents(button, row, col);
+
     }
 
     private void setGrid(GridPane grid){
         for (int i = 0; i < 10; i++){
             for (int j=0; j < 10; j++){
                 Button button = new Button();
-                button.setMinWidth(35);
-                button.setMinHeight(35);
-                button.setOnAction(actionEvent ->
-                {
-                    button.setDisable(true);
-                });
+                setButtonInGrid(button, i , j);
                 grid.add(button, i, j);
             }
         }
