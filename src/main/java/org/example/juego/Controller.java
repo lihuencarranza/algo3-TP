@@ -40,6 +40,10 @@ public class Controller {
         return game.board.matrix[row][col].isABomb();
     }
 
+    public void click(int row, int col){
+
+    }
+
     public int[][] endGame(){
         return game.board.minesList;
     }
