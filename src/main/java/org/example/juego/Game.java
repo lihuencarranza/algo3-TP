@@ -25,15 +25,16 @@ public class Game{
         return board.matrix[row][col];
 
     }
+    public boolean hasBomb(int row, int col){
+        return board.matrix[row][col].number == 10;
+    }
+
 
     public Game(){
         board = new Board();
     }
 
-    private void setCoordenates(int row, int col) {
-        // TODO Auto-generated method stub
 
-    }
 
 
 
