@@ -35,8 +35,7 @@ public class Board {
     }
 
     private void createTable(){
-        minesList = new int[10][2];
-        int listCount = 0;
+
 
         int rRow = randomNumberRows();
         int rCol = randomNumberCols();
@@ -49,9 +48,8 @@ public class Board {
                 i++;
                 createNumberBoxes(rRow, rCol);
             }
-            minesList[listCount][0] = rRow;
-            minesList[listCount][1] = rCol;
-            listCount++;
+
+
 
             rCol = randomNumberCols();
             rRow = randomNumberRows();
