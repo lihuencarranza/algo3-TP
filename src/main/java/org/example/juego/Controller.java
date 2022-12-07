@@ -5,20 +5,33 @@ import javafx.event.EventHandler;
 
 public class Controller {
     private Model model;
-    private View view;
-    public Controller(Model model, View view) {
+    public Game game;
+
+    public int availableFlags = 10;
+
+    public Controller(Model model) {
         this.model = model;
-        this.view = view;
     }
 
-    public void start() {
-        /*view.recordListen(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        })
-        */
-
+    void startGame(){
+        game = new Game();
     }
+
+
+    public void setFlag(int row, int col) {
+         game.board.setFlagBox(row, col);
+         this.availableFlags--;
+    }
+
+    public boolean isFlaged(int row, int col){
+        return game.board.matrix[row][col].flag;
+    }
+
+    public void removeFlag(int row, int col){
+        game.board.unsetFlag(row, col);
+        this.availableFlags++;
+    }
+
+
+
 }
