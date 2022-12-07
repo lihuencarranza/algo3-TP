@@ -10,6 +10,7 @@ public class Game{
 
     public boolean gameOver = false;
     public Board board;
+    public final int flags = 10;
 
     public Box usingBotModeBoxClicked(){
         board = new Board();
@@ -25,33 +26,8 @@ public class Game{
 
     }
 
-    public void level1(Menu menu){
+    public Game(){
         board = new Board();
-
-        while(!gameOver) {
-            try{
-                menu.printCommand();
-            }catch(NullPointerException e){
-                System.out.println("The Menu didn't work");
-            }
-
-            board.printBoard();
-            Scanner sc = new Scanner(System.in);
-            int command = sc.nextInt();
-            System.out.println("Introduce the column: ");
-            int row = sc.nextInt();
-            board.printBoard();
-            System.out.println("Introduce the row: ");
-            int col = sc.nextInt();
-
-            switch (command) {
-                case 1 -> gameOver = board.clickBox(col, row);
-                case 2 -> board.setFlagBox(col, row);
-            }
-        }
-
-        System.out.println("You lost!");
-
     }
 
     private void setCoordenates(int row, int col) {
@@ -59,10 +35,7 @@ public class Game{
 
     }
 
-    public Game(){
 
-
-    }
 
 
 }
