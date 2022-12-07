@@ -156,6 +156,13 @@ public class Board {
         }
     }
 
+    public void unsetFlag(int row, int col){
+        if (matrix[row][col].flag){
+            matrix[row][col].unsetFlag();
+        }
+    }
+
+
     public Box getBox(int row, int col) {
         return matrix[row][col];
     }
