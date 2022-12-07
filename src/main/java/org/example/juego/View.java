@@ -1,8 +1,11 @@
 package org.example.juego;
 
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -103,19 +107,41 @@ public class View {
 
         button.setOnMouseClicked(event -> {
             //caso click derecho y no tiene bandera
-            if (event.getButton() == MouseButton.SECONDARY && !controller.isFlaged(row, col)){
-                Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
-                ImageView flagImgView = new ImageView(flagIcon);
-                flagImgView.setFitWidth(19);
-                flagImgView.setFitHeight(20);
-                button.setGraphic(flagImgView);
-                controller.setFlag(row, col);
-                System.out.println("Flag: " + row + ", " + col);
+            switch (event.getButton()){
+                case SECONDARY://#8
+                    if (!controller.isFlaged(row, col)){
+                        Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
+                        ImageView flagImgView = new ImageView(flagIcon);
+                        flagImgView.setFitWidth(19);
+                        flagImgView.setFitHeight(20);
+                        button.setGraphic(flagImgView);
+                        controller.setFlag(row, col);
+                        System.out.println("Flag: " + row + ", " + col);
+                    }else{
+                        button.setGraphic(null);
+                        controller.setFlag(row, col);
+                    }
 
-            }/*else if(event.getButton() == MouseButton.SECONDARY){
-                button.setGraphic(null);
-                controller.setFlag(row, col);
-            }*/
+                case PRIMARY:
+                    if (!controller.isFlaged(row, col) && controller.hasBomb(row,col)){
+                        int mines[][] = controller.endGame();
+                        Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/Mine.png");
+                        ImageView mineImgView = new ImageView(mineIcon);
+                        mineImgView.setFitWidth(19);
+                        mineImgView.setFitHeight(20);
+                        button.setGraphic(mineImgView);
+                        button.setDisable(true);
+
+                        //#9 acá buscaria otras bombas para ponerlas visibles
+                    }else if (!controller.isFlaged(row,col)){
+                        controller.getNumber(row,col);
+                    }
+            }
+
+
+
+
+
         });
     }
     private void setButtonInGrid(Button button, int row, int col){
@@ -143,7 +169,9 @@ public class View {
         grid = new GridPane();
         setGrid(grid);
 
-        HBox hBox = new HBox(smileButton);
+        Label label = new Label("" + controller.availableFlags);
+        Pane pane = new Pane(label);
+        HBox hBox = new HBox(pane, smileButton);
         hBox.setAlignment(Pos.CENTER);
 
         VBox vBox = new VBox(hBox, grid);
