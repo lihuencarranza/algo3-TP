@@ -32,6 +32,17 @@ public class Controller {
         this.availableFlags++;
     }
 
+    public int getNumber(int row, int col){
+        return game.board.matrix[row][col].number;
+    }
+
+    public boolean hasBomb(int row, int col){
+        return game.board.matrix[row][col].isABomb();
+    }
+
+    public int[][] endGame(){
+        return game.board.minesList;
+    }
 
 
 }
