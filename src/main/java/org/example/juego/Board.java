@@ -34,29 +34,27 @@ public class Board {
         return (int) random.nextInt(columns);
     }
 
-    private void createTable(){
+    private void createTable() {
 
+        minesList = new int[mines+1][2];
 
         int rRow = randomNumberRows();
         int rCol = randomNumberCols();
 
-
         int i = 0;
         while (i < mines) {
-            if (matrix[rRow][rCol] == null || !matrix[rRow][rCol].bomb){
+            if (matrix[rRow][rCol] == null || !matrix[rRow][rCol].bomb) {
                 matrix[rRow][rCol] = BoxFactory.createBox(BoxFactory.Type.BOMB, 10);
                 i++;
                 createNumberBoxes(rRow, rCol);
+                minesList[i][0]=rRow;
+                minesList[i][1]=rCol;
             }
-
-
-
-            rCol = randomNumberCols();
             rRow = randomNumberRows();
+            rCol = randomNumberCols();
+
         }
-
         createEmptyBoxes();
-
     }
 
 
@@ -120,7 +118,7 @@ public class Board {
             return true;
         } else {
             matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, matrix[row][col].number);
-            clickNeighbours( row, col);
+            //clickNeighbours( row, col);
         }
         return false;
     }
@@ -157,8 +155,9 @@ public class Board {
 
     }
 
-    public void setFlagBox(int row, int col) {
+    public void setFlagBox( int row, int col) {
         if (!matrix[row][col].visible) {
+            matrix[row][col] = new Box(matrix[row][col].number);
             matrix[row][col].setFlag();
         }
     }
