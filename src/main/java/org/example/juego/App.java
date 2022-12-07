@@ -11,6 +11,8 @@ public class App extends Application {
         Model model = new Model();
         Controller controller = new Controller(model);
         View view = new View(stage, model, controller);
+        //Timer timer = new Timer();
+        //timer.start();
 
     }
     public static void main(String[] args){
