@@ -1,5 +1,6 @@
 package org.example.juego;
 
+import java.util.List;
 import java.util.Random;
 
 import org.example.juego.Boxes.Box;
@@ -9,6 +10,8 @@ public class Board {
     private int mines = 10;
     private final int rows = 10;
     private final int columns = 10;
+
+    public int[][] minesList;
 
 
     public Board() {
@@ -32,6 +35,9 @@ public class Board {
     }
 
     private void createTable(){
+        minesList = new int[10][2];
+        int listCount = 0;
+
         int rRow = randomNumberRows();
         int rCol = randomNumberCols();
 
@@ -43,6 +49,9 @@ public class Board {
                 i++;
                 createNumberBoxes(rRow, rCol);
             }
+            minesList[listCount][0] = rRow;
+            minesList[listCount][1] = rCol;
+            listCount++;
 
             rCol = randomNumberCols();
             rRow = randomNumberRows();
