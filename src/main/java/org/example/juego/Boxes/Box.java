@@ -14,6 +14,10 @@ public class Box {
         this.flag = true;
     }
 
+    public void unsetFlag(){
+        this.flag = false;
+    }
+
     public int getNumber() {
         return number;
     }
