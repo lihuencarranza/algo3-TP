@@ -17,11 +17,14 @@ public class View {
     private final Model model;
     private Controller controller;
 
-    private List<Button> buttonList;
+    private List<Button> minesList;
+
+    private Button[][] buttonsMatrix;
     private Stage stage;
     private Scene scene1;
     private Button startButton;
     private Button rulesButton;
+
 
     private Scene scene2;
     private GridPane grid;
@@ -145,9 +148,7 @@ public class View {
     }
     private void clickBombs(){
         controller.endGame();
-
-
-        for(Button b : buttonList){
+        for(Button b : minesList){
             b.setGraphic(mineImage());
             b.setDisable(true);
         }
@@ -169,33 +170,28 @@ public class View {
     }
 
     private void clickEmptyBoxesAround(int row, int col){
-        row = permittedRow(row);
-        col = permittedCol(col);
 
-        if (!controller.isClickable(row,col)){
-            System.out.println("no es clickable");
+        //row = permittedRow(row);
+        //col = permittedCol(col);
+        if (row < 0 || col < 0 || row > model.getRows() || col > model.getCols())
             return;
-        }
-        System.out.println("es clickable");
+        if (!controller.isClickable(row,col) || controller.getNumber(row,col) != 0 )
+            return;
+
+
+        buttonsMatrix[row][col].setDisable(true);
         controller.click(row,col);
-        Button b = new Button();
-        b.setMinWidth(35);
-        b.setMinHeight(35);
-        b.setDisable(true);
-        if (controller.getNumber(row,col) > 0){
-            clickNumber(b, row, col);
-            return;
-        }
-        grid.add(b,row,col);
-        /*clickEmptyBoxesAround(row-1, col-1);
-        clickEmptyBoxesAround(row-1, col+1);
-        clickEmptyBoxesAround(row+1, col-1);
-        clickEmptyBoxesAround(row+1, col+1);
-        clickEmptyBoxesAround(row-1, col);
-        clickEmptyBoxesAround(row+1, col);
-        clickEmptyBoxesAround(row, col-1);
-        clickEmptyBoxesAround(row, col+1);
-        */return;
+
+
+        clickEmptyBoxesAround(row-1,col-1);
+        clickEmptyBoxesAround(row+1,col-1);
+        /*clickEmptyBoxesAround(row+1,col+1);
+        clickEmptyBoxesAround(row-1,col+1);
+        clickEmptyBoxesAround(row+1,col);
+        clickEmptyBoxesAround(row-1,col);
+        clickEmptyBoxesAround(row,col-1);
+        clickEmptyBoxesAround(row,col+1);*/
+
     }
 
     public void clickNumber(Button b, int row, int col){
@@ -240,7 +236,7 @@ public class View {
 
                     }else if(!controller.isFlaged(row,col) && controller.getNumber(row, col) == 0){
                         clickEmptyBoxesAround(row,col);
-                    }if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10){
+                    }if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10 && controller.getNumber(row, col) != 0){
                         clickNumber(button, row, col);
                     }
                     break;
@@ -248,8 +244,6 @@ public class View {
 
             }
             controller.game.board.printBoard();
-
-
 
 
         });
@@ -266,11 +260,13 @@ public class View {
             for (int j=0; j < model.getCols(); j++){
                 Button button = new Button();
                 setButtonInGrid(button, i , j);
+                buttonsMatrix[j][i] = button;
                 if (controller.hasBomb(j, i))
-                    buttonList.add(button);
+                    minesList.add(button);
                 grid.add(button, i, j);
             }
         }
+        System.out.println(minesList.size());
     }
 
     private Scene createGameScene() {
@@ -278,7 +274,8 @@ public class View {
         controller.startGame();
         smileButton = new Button();
         setSmileButton(smileButton);
-        buttonList = new ArrayList<Button>() ;
+        minesList = new ArrayList<Button>() ;
+        buttonsMatrix = new Button[model.getRows()][model.getCols()];
         grid = new GridPane();
         setGrid(grid);
 
