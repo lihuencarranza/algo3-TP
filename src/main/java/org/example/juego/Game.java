@@ -12,6 +12,7 @@ public class Game{
     public Board board;
     public final int flags = 10;
 
+
     public Box usingBotModeBoxClicked(){
         board = new Board();
         Random random = new Random();

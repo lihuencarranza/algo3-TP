@@ -26,7 +26,7 @@ public class Controller {
     }
 
     public boolean isClickable(int row, int col){
-        return game.board.matrix[row][col].isClickeable();
+        return game.board.matrix[row][col].isClickable();
     }
 
     public void removeFlag(int row, int col){

@@ -13,8 +13,6 @@ import javafx.stage.Stage;
 public class View {
 
     private final Controller controller;
-
-
     private Button[][] buttonsMatrix;
     private final Stage stage;
     private Scene scene1;
@@ -118,6 +116,7 @@ public class View {
                     if(!controller.isFlaged(row,col)){
                         button.setGraphic(flagImage(button));
                         controller.setFlag(row,col);
+                        checkGame();
                     }else{
                         button.setGraphic(null);
                         controller.removeFlag(row,col);
@@ -135,7 +134,6 @@ public class View {
                     }
                     break;
             }
-            checkGame();
             controller.game.board.printBoard();
 
         });
@@ -148,15 +146,31 @@ public class View {
     public void endGame(boolean result){
         if(result){
             smileButton.setGraphic(starEyesFaceImage());
+
+
         }else {
             smileButton.setGraphic(loserSmileImage());}
     }
-    private boolean validateFlagInBomb(){
+    public void  disableButtons(){
+        Button b;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                b = buttonsMatrix[i][j];
+                if (!b.isDisabled()){
+                    b.setGraphic(blankImage(b));
+                }
 
-        for (int j = 0; j < 10;j++){
-            Button b = minesList[j];
-            if(b.getGraphic() != flagImage(b)){
-                return false;
+            }
+        }
+    }
+    private boolean validateFlagInBomb(){
+        Button b;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++){
+                b = buttonsMatrix[i][j];
+                if (controller.hasBomb(i, j) && !controller.isFlaged(i, j)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -235,7 +249,6 @@ public class View {
             case 6 -> new Image("file:src/main/java/org/example/juego/resources/6.png");
             case 7 -> new Image("file:src/main/java/org/example/juego/resources/7.png");
             case 8 -> new Image("file:src/main/java/org/example/juego/resources/8.png");
-            case 9 -> new Image("file:src/main/java/org/example/juego/resources/9.png");
             case 10 -> new Image("file:src/main/java/org/example/juego/resources/Mine.png");
             default -> null;
         };

@@ -37,7 +37,7 @@ public class Box {
         return bomb;
     }
 
-    public boolean isClickeable() {
+    public boolean isClickable() {
         return !flag || !visible;
     }
 }
