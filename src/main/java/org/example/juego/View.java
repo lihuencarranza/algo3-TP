@@ -75,7 +75,6 @@ public class View {
         smileButton = new Button();
         setSmileButton(smileButton);
         buttonsMatrix = new Button[10][10];
-        minesList = new Button[10];
         GridPane grid = new GridPane();
         setGrid(grid);
 
