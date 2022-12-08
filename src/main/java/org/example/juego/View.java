@@ -26,7 +26,6 @@ public class View {
     private Button startButton;
     private Button rulesButton;
 
-
     private Scene scene2;
     private GridPane grid;
     private Button smileButton;
@@ -85,7 +84,6 @@ public class View {
         controller.startGame();
         smileButton = new Button();
         setSmileButton(smileButton);
-        minesList = new ArrayList<Button>() ;
         buttonsMatrix = new Button[model.getRows()][model.getCols()];
         grid = new GridPane();
         setGrid(grid);
@@ -102,6 +100,7 @@ public class View {
     }
 
     private void setGrid(GridPane grid){
+        minesList = new ArrayList<>();
         for (int i = 0; i < model.getRows(); i++){
             for (int j=0; j < model.getCols(); j++){
                 Button button = new Button();
@@ -138,11 +137,10 @@ public class View {
                         controller.click(row,col);
                         button.setGraphic(mineImage());
                         button.setDisable(true);
-                    }
-                        controller.click(row,col);
-                        button.setGraphic(mineImage());
-                        button.setDisable(true);
                         clickAllBombs();
+                    }else if (!controller.isFlaged(row,col) && controller.getNumber(row,col) != 0 && !controller.hasBomb(row,col)){
+                        controller.click(row,col);
+                    }
                     break;
 
 
@@ -155,7 +153,14 @@ public class View {
     private void clickAllBombs(){
         for (Button b: minesList) {
             b.setGraphic(mineImage());
-            b.setDisable(true);
+            //b.setDisable(true);
+        }
+        for (int i = 0; i < model.getRows(); i++){
+            for (int j = 0; j < model.getCols(); j++){
+                Button b = buttonsMatrix[i][j];
+                if (!controller.hasBomb(i,j))
+                    b.setDisable(true);
+            }
         }
         smileButton.setGraphic(loserSmileImage());
     }
