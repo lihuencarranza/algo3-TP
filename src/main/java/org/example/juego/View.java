@@ -11,7 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class View {
     private final Model model;
@@ -45,23 +46,10 @@ public class View {
 
         stage.show();
     }
-
-    private Button setStartButton(){
-        Button b = new Button("start");
-        b.setMinHeight(50);
-        b.setMinWidth(100);
-        b.setOnAction(e -> {
-            switchScenes(scene2);
-        });
-        return b;
+    public void switchScenes(Scene scene) {
+        stage.setScene(scene);
     }
 
-    private Button setRulesButton(){
-        Button b = new Button("rules");
-        b.setMinHeight(50);
-        b.setMinWidth(100);
-        return b;
-    }
     private Scene createInitialScene() {
 
         startButton = setStartButton();
@@ -76,183 +64,41 @@ public class View {
         scene1 = new Scene(vBox,350,425);
         return scene1;
     }
-
-    private void setSmileButton(Button smileButton){
-        smileButton.setMinWidth(50);
-        smileButton.setMinHeight(50);
-        Image smileIcon = new Image("file:src/main/java/org/example/juego/resources/smile.png");
-        ImageView smileImgView = new ImageView(smileIcon);
-        smileImgView.setFitHeight(50);
-        smileImgView.setPreserveRatio(true);
-        smileButton.setGraphic(smileImgView);
-
-        smileButton.setOnMouseClicked(event -> {
-                scene2 = createGameScene();
-                switchScenes(scene2);
-                controller.startGame();
+    private Button setStartButton(){
+        Button b = new Button("start");
+        b.setMinHeight(50);
+        b.setMinWidth(100);
+        b.setOnAction(e -> {
+            switchScenes(scene2);
         });
-
+        return b;
+    }
+    private Button setRulesButton(){
+        Button b = new Button("rules");
+        b.setMinHeight(50);
+        b.setMinWidth(100);
+        return b;
     }
 
-    private ImageView numberImage(int i){
-        Image img = switch (i) {
-            case 1 -> new Image("file:src/main/java/org/example/juego/resources/1.png");
-            case 2 -> new Image("file:src/main/java/org/example/juego/resources/2.png");
-            case 3 -> new Image("file:src/main/java/org/example/juego/resources/3.png");
-            case 4 -> new Image("file:src/main/java/org/example/juego/resources/4.png");
-            case 5 -> new Image("file:src/main/java/org/example/juego/resources/5.png");
-            case 6 -> new Image("file:src/main/java/org/example/juego/resources/6.png");
-            case 7 -> new Image("file:src/main/java/org/example/juego/resources/7.png");
-            case 8 -> new Image("file:src/main/java/org/example/juego/resources/8.png");
-            case 9 -> new Image("file:src/main/java/org/example/juego/resources/9.png");
-            default -> null;
-        };
+    private Scene createGameScene() {
 
-        ImageView imgView = new ImageView(img);
-        imgView.setFitWidth(19);
-        imgView.setFitHeight(20);
-        return imgView;
-    }
+        controller.startGame();
+        smileButton = new Button();
+        setSmileButton(smileButton);
+        minesList = new ArrayList<Button>() ;
+        buttonsMatrix = new Button[model.getRows()][model.getCols()];
+        grid = new GridPane();
+        setGrid(grid);
 
-    private ImageView flagImage(){
-        Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
-        ImageView flagImgView = new ImageView(flagIcon);
-        flagImgView.setFitWidth(19);
-        flagImgView.setFitHeight(20);
-        return flagImgView;
-    }
+        HBox hBox = new HBox(smileButton);
+        hBox.setAlignment(Pos.CENTER);
 
-    private ImageView mineImage(){
-        Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/Mine.png");
-        ImageView mineImgView = new ImageView(mineIcon);
-        mineImgView.setFitWidth(19);
-        mineImgView.setFitHeight(20);
+        VBox vBox = new VBox(hBox, grid);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(15);
+        scene2 = new Scene(vBox);
 
-        return mineImgView;
-    }
-
-    private ImageView setLoserSmile(){
-        Image loserImg= new Image("file:src/main/java/org/example/juego/resources/cryFace.png");
-        ImageView loserImgView = new ImageView(loserImg);
-        loserImgView.setFitWidth(50);
-        loserImgView.setFitHeight(50);
-        return loserImgView;
-    }
-
-    private ImageView setWinSmile(){
-        Image starImg= new Image("file:src/main/java/org/example/juego/resources/starEyes.png");
-        ImageView starImgView = new ImageView(starImg);
-        starImgView.setFitWidth(50);
-        starImgView.setFitHeight(50);
-        return starImgView;
-    }
-    private void clickBombs(){
-        controller.endGame();
-        for(Button b : minesList){
-            b.setGraphic(mineImage());
-            b.setDisable(true);
-        }
-        smileButton.setGraphic(setLoserSmile());
-    }
-    private int permittedRow(int i){
-        if(i < 0)
-            return 0;
-        else if(i > model.getRows())
-            return model.getRows();
-        return i;
-    }
-    private int permittedCol(int i){
-        if(i < 0)
-            return 0;
-        else if(i > model.getCols())
-            return model.getCols();
-        return i;
-    }
-
-    private void clickEmptyBoxesAround(int row, int col){
-
-        //row = permittedRow(row);
-        //col = permittedCol(col);
-        if (row < 0 || col < 0 || row > model.getRows() || col > model.getCols())
-            return;
-        if (!controller.isClickable(row,col) || controller.getNumber(row,col) != 0 )
-            return;
-
-
-        buttonsMatrix[row][col].setDisable(true);
-        controller.click(row,col);
-
-
-        clickEmptyBoxesAround(row-1,col-1);
-        clickEmptyBoxesAround(row+1,col-1);
-        /*clickEmptyBoxesAround(row+1,col+1);
-        clickEmptyBoxesAround(row-1,col+1);
-        clickEmptyBoxesAround(row+1,col);
-        clickEmptyBoxesAround(row-1,col);
-        clickEmptyBoxesAround(row,col-1);
-        clickEmptyBoxesAround(row,col+1);*/
-
-    }
-
-    public void clickNumber(Button b, int row, int col){
-        int i = controller.getNumber(row,col);
-        b.setGraphic(numberImage(i));
-        b.setDisable(true);
-        controller.click(row, col);
-    }
-    public void disableButtons(){
-        /*for (int i = 0; i < model.getRows(); i++){
-            for (int j=0; j < model.getCols(); j++){
-                if (!controller.hasBomb(i,j) && !controller.isFlaged(i,j) && !controller.isVisible(i, j)){
-                    Button b = new Button();
-                    b.setDisable(true);
-                    grid.add(b, i, j);
-                }
-            }
-        }*/
-
-    }
-    private void setButtonInGridEvents(Button button, int col, int row){
-
-        button.setOnMouseClicked(event -> {
-            switch (event.getButton()){
-                case SECONDARY://#8
-                    if (!controller.isFlaged(row, col)){
-                        button.setGraphic(flagImage());
-                        controller.setFlag(row, col);
-                    }else if(controller.isFlaged(row, col)){
-                        button.setGraphic(null);
-                        controller.removeFlag(row,col);
-                    }
-                    break;
-
-                case PRIMARY:
-                    if (!controller.isFlaged(row, col) && controller.hasBomb(row,col)){
-                        button.setGraphic(mineImage());
-                        button.setDisable(true);
-                        controller.click(row, col);
-                        disableButtons();
-                        clickBombs();
-
-                    }else if(!controller.isFlaged(row,col) && controller.getNumber(row, col) == 0){
-                        clickEmptyBoxesAround(row,col);
-                    }if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10 && controller.getNumber(row, col) != 0){
-                        clickNumber(button, row, col);
-                    }
-                    break;
-
-
-            }
-            controller.game.board.printBoard();
-
-
-        });
-    }
-    private void setButtonInGrid(Button button, int row, int col){
-        button.setMinWidth(35);
-        button.setMinHeight(35);
-        setButtonInGridEvents(button, row, col);
-
+        return scene2;
     }
 
     private void setGrid(GridPane grid){
@@ -268,35 +114,89 @@ public class View {
         }
         System.out.println(minesList.size());
     }
+    private void setButtonInGrid(Button button, int row, int col){
+        button.setMinWidth(35);
+        button.setMinHeight(35);
+        setButtonInGridEvents(button, row, col);
+    }
+    private void setButtonInGridEvents(Button button, int col, int row){
 
-    private Scene createGameScene() {
+        button.setOnMouseClicked(event -> {
+            switch (event.getButton()){
+                case SECONDARY:
+                    if(!controller.isFlaged(row,col)){
+                        button.setGraphic(flagImage());
+                        controller.setFlag(row,col);
+                    }else{
+                        button.setGraphic(null);
+                        controller.removeFlag(row,col);
+                    }
+                    break;
 
-        controller.startGame();
-        smileButton = new Button();
-        setSmileButton(smileButton);
-        minesList = new ArrayList<Button>() ;
-        buttonsMatrix = new Button[model.getRows()][model.getCols()];
-        grid = new GridPane();
-        setGrid(grid);
+                case PRIMARY:
+                    if(!controller.isFlaged(row,col) && controller.hasBomb(row,col)) {
+                        controller.click(row,col);
+                        button.setGraphic(mineImage());
+                        button.setDisable(true);
+                    }
+                        controller.click(row,col);
+                        button.setGraphic(mineImage());
+                        button.setDisable(true);
+                        clickAllBombs();
+                    break;
 
-        //Label label = new Label("" + controller.availableFlags);
-        //Pane pane = new Pane(label);
-        HBox hBox = new HBox(smileButton);
-        hBox.setAlignment(Pos.CENTER);
 
-        VBox vBox = new VBox(hBox, grid);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(15);
-        scene2 = new Scene(vBox);
+            }
+            controller.game.board.printBoard();
 
-        return scene2;
+        });
     }
 
-    private Scene createRules(){return scene1;}
+    private void clickAllBombs(){
+        for (Button b: minesList) {
+            b.setGraphic(mineImage());
+            b.setDisable(true);
+        }
+        smileButton.setGraphic(loserSmileImage());
+    }
+    private ImageView mineImage(){
+        Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/Mine.png");
+        ImageView mineImgView = new ImageView(mineIcon);
+        mineImgView.setFitWidth(19);
+        mineImgView.setFitHeight(20);
 
+        return mineImgView;
+    }
+    private ImageView flagImage(){
+        Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
+        ImageView flagImgView = new ImageView(flagIcon);
+        flagImgView.setFitWidth(19);
+        flagImgView.setFitHeight(20);
+        return flagImgView;
+    }
+    private ImageView loserSmileImage(){
+        Image loserImg= new Image("file:src/main/java/org/example/juego/resources/cryFace.png");
+        ImageView loserImgView = new ImageView(loserImg);
+        loserImgView.setFitWidth(50);
+        loserImgView.setFitHeight(50);
+        return loserImgView;
+    }
 
-    public void switchScenes(Scene scene) {
-        stage.setScene(scene);
+    private void setSmileButton(Button smileButton){
+        smileButton.setMinWidth(50);
+        smileButton.setMinHeight(50);
+        Image smileIcon = new Image("file:src/main/java/org/example/juego/resources/smile.png");
+        ImageView smileImgView = new ImageView(smileIcon);
+        smileImgView.setFitHeight(50);
+        smileImgView.setPreserveRatio(true);
+        smileButton.setGraphic(smileImgView);
+
+        smileButton.setOnMouseClicked(event -> {
+            scene2 = createGameScene();
+            switchScenes(scene2);
+            controller.startGame();
+        });
+
     }
 
 }
