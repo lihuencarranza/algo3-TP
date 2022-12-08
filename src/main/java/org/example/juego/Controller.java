@@ -11,7 +11,7 @@ public class Controller {
     }
 
     void startGame(){
-        model.setLevel(1);
+
         game = new Game();
 
     }

@@ -16,18 +16,15 @@ import java.util.List;
 
 public class View {
     private final Model model;
-    private Controller controller;
+    private final Controller controller;
 
-    private List<Button> minesList;
+    private Button[] minesList;
 
     private Button[][] buttonsMatrix;
-    private Stage stage;
+    private final Stage stage;
     private Scene scene1;
-    private Button startButton;
-    private Button rulesButton;
 
     private Scene scene2;
-    private GridPane grid;
     private Button smileButton;
 
     public View(Stage stage, Model model, Controller controller){
@@ -51,8 +48,8 @@ public class View {
 
     private Scene createInitialScene() {
 
-        startButton = setStartButton();
-        rulesButton = setRulesButton();
+        Button startButton = setStartButton();
+        Button rulesButton = setRulesButton();
 
 
         Label label = new Label(model.getTitleApp());
@@ -67,9 +64,7 @@ public class View {
         Button b = new Button("start");
         b.setMinHeight(50);
         b.setMinWidth(100);
-        b.setOnAction(e -> {
-            switchScenes(scene2);
-        });
+        b.setOnAction(e -> switchScenes(scene2));
         return b;
     }
     private Button setRulesButton(){
@@ -84,8 +79,9 @@ public class View {
         controller.startGame();
         smileButton = new Button();
         setSmileButton(smileButton);
-        buttonsMatrix = new Button[model.getRows()][model.getCols()];
-        grid = new GridPane();
+        buttonsMatrix = new Button[10][10];
+        minesList = new Button[10];
+        GridPane grid = new GridPane();
         setGrid(grid);
 
         HBox hBox = new HBox(smileButton);
@@ -100,18 +96,21 @@ public class View {
     }
 
     private void setGrid(GridPane grid){
-        minesList = new ArrayList<>();
-        for (int i = 0; i < model.getRows(); i++){
-            for (int j=0; j < model.getCols(); j++){
+
+        int h = 0;
+        for (int i = 0; i < 10; i++){
+            for (int j=0; j < 10; j++){
                 Button button = new Button();
-                setButtonInGrid(button, i , j);
-                buttonsMatrix[j][i] = button;
-                if (controller.hasBomb(j, i))
-                    minesList.add(button);
-                grid.add(button, i, j);
+                setButtonInGrid(button, j , i);
+                if (controller.hasBomb(i,j)) {
+                    minesList[h] = button;
+                    h++;
+                }
+                buttonsMatrix[i][j] = button;
+                grid.add(button, j, i);
             }
         }
-        System.out.println(minesList.size());
+
     }
     private void setButtonInGrid(Button button, int row, int col){
         button.setMinWidth(35);
@@ -135,8 +134,8 @@ public class View {
                 case PRIMARY:
                     if(!controller.isFlaged(row,col) && controller.hasBomb(row,col)) {
                         controller.click(row,col);
-                        button.setGraphic(mineImage());
                         button.setDisable(true);
+                        button.setGraphic(mineImage());
                         clickAllBombs();
                     }else if (!controller.isFlaged(row,col) && controller.getNumber(row,col) != 0 && !controller.hasBomb(row,col)){
                         controller.click(row,col);
@@ -151,17 +150,13 @@ public class View {
     }
 
     private void clickAllBombs(){
-        for (Button b: minesList) {
+
+        for (int i = 0; i < minesList.length; i++){
+            Button b = minesList[i];
+            b.setDisable(true);
             b.setGraphic(mineImage());
-            //b.setDisable(true);
         }
-        for (int i = 0; i < model.getRows(); i++){
-            for (int j = 0; j < model.getCols(); j++){
-                Button b = buttonsMatrix[i][j];
-                if (!controller.hasBomb(i,j))
-                    b.setDisable(true);
-            }
-        }
+
         smileButton.setGraphic(loserSmileImage());
     }
     private ImageView mineImage(){
@@ -198,8 +193,9 @@ public class View {
 
         smileButton.setOnMouseClicked(event -> {
             scene2 = createGameScene();
-            switchScenes(scene2);
             controller.startGame();
+            switchScenes(scene2);
+
         });
 
     }

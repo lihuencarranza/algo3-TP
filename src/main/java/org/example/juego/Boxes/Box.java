@@ -26,8 +26,6 @@ public class Box {
     public void printBox() {
         if (flag)
             System.out.print("|F|");
-        else if (!visible)
-            System.out.print("|x|");
         else if (bomb)
             System.out.print("|B|");
         else
