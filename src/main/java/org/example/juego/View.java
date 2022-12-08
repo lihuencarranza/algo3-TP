@@ -14,7 +14,6 @@ public class View {
 
     private final Controller controller;
 
-    private Button[] minesList;
 
     private Button[][] buttonsMatrix;
     private final Stage stage;
@@ -98,10 +97,6 @@ public class View {
             for (int j=0; j < 10; j++){
                 Button button = new Button();
                 setButtonInGrid(button, j , i);
-                if (controller.hasBomb(i,j)) {
-                    minesList[h] = button;
-                    h++;
-                }
                 buttonsMatrix[i][j] = button;
                 grid.add(button, j, i);
             }
@@ -184,10 +179,19 @@ public class View {
     }
     private void clickAllBombs(int row, int col){
         controller.click(row,col);
-        for (Button b : minesList) {
-            b.setDisable(true);
-            b.setGraphic(mineImage());
+        Button b;
+        for (int i = 0; i < 10; i++){
+            for (int j=0; j < 10; j++) {
+                b = buttonsMatrix[i][j];
+                if (controller.hasBomb(i,j)){
+                    b.setGraphic(mineImage(b));
+                    b.setDisable(true);
+                }
+
+            }
         }
+        b = buttonsMatrix[row][col];
+        b.setGraphic(bloodImage(b));
 
     }
     private void clickNumberBox(Button button, int row, int col){
@@ -233,6 +237,7 @@ public class View {
             case 7 -> new Image("file:src/main/java/org/example/juego/resources/7.png");
             case 8 -> new Image("file:src/main/java/org/example/juego/resources/8.png");
             case 9 -> new Image("file:src/main/java/org/example/juego/resources/9.png");
+            case 10 -> new Image("file:src/main/java/org/example/juego/resources/Mine.png");
             default -> null;
         };
 
@@ -242,12 +247,20 @@ public class View {
         imgView.setPreserveRatio(true);
         return imgView;
     }
-    private ImageView mineImage(){
+    private ImageView bloodImage(Button b){
+        Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/blood.png");
+        ImageView mineImgView = new ImageView(mineIcon);
+        mineImgView.fitWidthProperty().bind(b.widthProperty());
+        mineImgView.fitHeightProperty().bind(b.heightProperty());
+        mineImgView.setPreserveRatio(true);
+        return mineImgView;
+    }
+    private ImageView mineImage(Button b){
         Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/Mine.png");
         ImageView mineImgView = new ImageView(mineIcon);
-        mineImgView.setFitWidth(19);
-        mineImgView.setFitHeight(20);
-
+        mineImgView.fitWidthProperty().bind(b.widthProperty());
+        mineImgView.fitHeightProperty().bind(b.heightProperty());
+        mineImgView.setPreserveRatio(true);
         return mineImgView;
     }
     private ImageView flagImage(Button b){

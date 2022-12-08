@@ -10,8 +10,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         Controller controller = new Controller();
         View view = new View(stage, controller);
-        //Timer timer = new Timer();
-        //timer.start();
+
 
     }
     public static void main(String[] args){
