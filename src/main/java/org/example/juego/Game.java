@@ -30,7 +30,7 @@ public class Game{
     }
 
     public void clickBox(int row, int col){
-        board.matrix[row][col] = new Box(board.matrix[row][col].number);
+        board.matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, board.matrix[row][col].getNumber());
     }
 
 

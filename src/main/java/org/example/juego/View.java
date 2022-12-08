@@ -146,27 +146,48 @@ public class View {
     private void clickBombs(){
         controller.endGame();
 
+
         for(Button b : buttonList){
             b.setGraphic(mineImage());
             b.setDisable(true);
         }
         smileButton.setGraphic(setLoserSmile());
     }
+    private int permittedRow(int i){
+        if(i < 0)
+            return 0;
+        else if(i > model.getRows())
+            return model.getRows();
+        return i;
+    }
+    private int permittedCol(int i){
+        if(i < 0)
+            return 0;
+        else if(i > model.getCols())
+            return model.getCols();
+        return i;
+    }
 
     private void clickEmptyBoxesAround(int row, int col){
+        row = permittedRow(row);
+        col = permittedCol(col);
+
         if (!controller.isClickable(row,col)){
-            System.out.println("tiene flag");
+            System.out.println("no es clickable");
             return;
         }
-        System.out.println("no tiene flag");
+        System.out.println("es clickable");
+        controller.click(row,col);
         Button b = new Button();
+        b.setMinWidth(35);
+        b.setMinHeight(35);
         b.setDisable(true);
-        grid.add(b,row,col);
         if (controller.getNumber(row,col) > 0){
-            clicknumber(b, row, col);
+            clickNumber(b, row, col);
             return;
         }
-        clickEmptyBoxesAround(row-1, col-1);
+        grid.add(b,row,col);
+        /*clickEmptyBoxesAround(row-1, col-1);
         clickEmptyBoxesAround(row-1, col+1);
         clickEmptyBoxesAround(row+1, col-1);
         clickEmptyBoxesAround(row+1, col+1);
@@ -174,10 +195,10 @@ public class View {
         clickEmptyBoxesAround(row+1, col);
         clickEmptyBoxesAround(row, col-1);
         clickEmptyBoxesAround(row, col+1);
-        return;
+        */return;
     }
 
-    public void clicknumber(Button b, int row, int col){
+    public void clickNumber(Button b, int row, int col){
         int i = controller.getNumber(row,col);
         b.setGraphic(numberImage(i));
         b.setDisable(true);
@@ -213,13 +234,14 @@ public class View {
                     if (!controller.isFlaged(row, col) && controller.hasBomb(row,col)){
                         button.setGraphic(mineImage());
                         button.setDisable(true);
+                        controller.click(row, col);
                         disableButtons();
                         clickBombs();
 
                     }else if(!controller.isFlaged(row,col) && controller.getNumber(row, col) == 0){
                         clickEmptyBoxesAround(row,col);
                     }if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10){
-                        clicknumber(button, row, col);
+                        clickNumber(button, row, col);
                     }
                     break;
 
@@ -273,58 +295,11 @@ public class View {
         return scene2;
     }
 
-    private Scene createRules(){
-        return scene1;
-    }
+    private Scene createRules(){return scene1;}
+
 
     public void switchScenes(Scene scene) {
         stage.setScene(scene);
     }
 
-
-
-
-
-    /*public View(Stage stage, Model model){
-        //stage.setTitle("Minesweeper");
-        //menu = new Scene(createMenu());
-        //stage.setScene(menu);
-        //stage.show();
-        //stage.getIcons().add(new Image("https://cdn-icons-png.flaticon.com/512/595/595582.png"));
-        //stage.setResizable(false);
-        //s = new Scene(createContent());
-
-
-
-    }
-
-    private Parent createMenu() {
-        Pane pane = new Pane();
-        Button b = new Button();
-        b.setOnAction(actionEvent ->
-                s = new Scene(createContent()));
-        return pane;
-    }
-
-    private Parent createContent() {
-        smile = new Button();
-
-
-        grid = new GridPane();
-        for (int j = 0; j < 10; j++){
-            for (int i= 0; i<10; i++){
-                Button button = new Button();
-                button.setMinWidth(35);
-                button.setMinHeight(35);
-                button.setOnAction(actionEvent ->  {
-                    button.setDisable(true);
-                });
-                GridPane.setFillWidth(button, true);
-                grid.add(button, i, j);
-            }
-        }
-
-
-        return grid;
-    }*/
 }

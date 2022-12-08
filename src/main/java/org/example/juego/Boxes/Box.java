@@ -40,6 +40,6 @@ public class Box {
     }
 
     public boolean isClickeable() {
-        return !flag && !visible;
+        return !flag || !visible;
     }
 }
