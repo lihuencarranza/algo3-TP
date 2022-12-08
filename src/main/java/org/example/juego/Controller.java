@@ -1,13 +1,12 @@
 package org.example.juego;
 
 public class Controller {
-    private Model model;
     public Game game;
 
     public int availableFlags = 10;
 
-    public Controller(Model model) {
-        this.model = model;
+    public Controller() {
+
     }
 
     void startGame(){

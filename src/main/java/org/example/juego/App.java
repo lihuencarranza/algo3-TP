@@ -8,9 +8,8 @@ public class App extends Application {
     private Game game;
     @Override
     public void start(Stage stage) throws Exception {
-        Model model = new Model();
-        Controller controller = new Controller(model);
-        View view = new View(stage, model, controller);
+        Controller controller = new Controller();
+        View view = new View(stage, controller);
         //Timer timer = new Timer();
         //timer.start();
 

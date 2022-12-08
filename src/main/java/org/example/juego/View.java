@@ -6,16 +6,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class View {
-    private final Model model;
+
     private final Controller controller;
 
     private Button[] minesList;
@@ -27,11 +23,11 @@ public class View {
     private Scene scene2;
     private Button smileButton;
 
-    public View(Stage stage, Model model, Controller controller){
-        this.model = model;
+    public View(Stage stage,  Controller controller){
+
         this.controller = controller;
         this.stage = stage;
-        stage.setTitle(model.getTitleApp());
+        stage.setTitle("Minesweeper");
         stage.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
         stage.setResizable(false);
 
@@ -52,7 +48,7 @@ public class View {
         Button rulesButton = setRulesButton();
 
 
-        Label label = new Label(model.getTitleApp());
+        Label label = new Label("hola");
 
         VBox vBox = new VBox(label, startButton, rulesButton);
         vBox.setSpacing(30);
@@ -113,17 +109,20 @@ public class View {
 
     }
     private void setButtonInGrid(Button button, int row, int col){
+
         button.setMinWidth(35);
         button.setMinHeight(35);
+        button.setCancelButton(true);
+        button.setGraphic(blankImage(button));
+        //blankImage(button);
         setButtonInGridEvents(button, row, col);
     }
     private void setButtonInGridEvents(Button button, int col, int row){
-
         button.setOnMouseClicked(event -> {
             switch (event.getButton()){
                 case SECONDARY:
                     if(!controller.isFlaged(row,col)){
-                        button.setGraphic(flagImage());
+                        button.setGraphic(flagImage(button));
                         controller.setFlag(row,col);
                     }else{
                         button.setGraphic(null);
@@ -133,31 +132,115 @@ public class View {
 
                 case PRIMARY:
                     if(!controller.isFlaged(row,col) && controller.hasBomb(row,col)) {
-                        controller.click(row,col);
-                        button.setDisable(true);
-                        button.setGraphic(mineImage());
-                        clickAllBombs();
-                    }else if (!controller.isFlaged(row,col) && controller.getNumber(row,col) != 0 && !controller.hasBomb(row,col)){
-                        controller.click(row,col);
+                        clickAllBombs(row,col);
+                        endGame(false);
+                    }else if (!controller.isFlaged(row,col) && controller.getNumber(row,col) == 0){
+                        clickEmptyBoxes(row,col);
+                    }else if(!controller.isFlaged(row,col)){
+                        clickNumberBox(button,row,col);
                     }
                     break;
-
-
             }
+            checkGame();
             controller.game.board.printBoard();
 
         });
     }
+    private void checkGame(){
+       if(controller.availableFlags == 0 && validateFlagInBomb()){
+            endGame(true);
+       }
+    }
+    public void endGame(boolean result){
+        if(result){
+            smileButton.setGraphic(starEyesFaceImage());
+        }else {
+            smileButton.setGraphic(loserSmileImage());}
+    }
+    private boolean validateFlagInBomb(){
 
-    private void clickAllBombs(){
+        for (int j = 0; j < 10;j++){
+            Button b = minesList[j];
+            if(b.getGraphic() != flagImage(b)){
+                return false;
+            }
+        }
+        return true;
+    }
 
-        for (int i = 0; i < minesList.length; i++){
-            Button b = minesList[i];
+    private int legalRow(int row){
+        if(row < 0)
+            return 0;
+        else if(row >= 10)
+            return 10-1;
+        return row;
+    }
+    private int legalCol(int col){
+        if(col < 0)
+            return 0;
+        else if(col >= 10)
+            return 10-1;
+        return col;
+    }
+    private void clickAllBombs(int row, int col){
+        controller.click(row,col);
+        for (Button b : minesList) {
             b.setDisable(true);
             b.setGraphic(mineImage());
         }
 
-        smileButton.setGraphic(loserSmileImage());
+    }
+    private void clickNumberBox(Button button, int row, int col){
+        controller.click(row,col);
+        button.setGraphic(numberImage(controller.getNumber(row,col), buttonsMatrix[row][col]));
+        button.setDisable(true);
+    }
+    private void clickEmptyBoxes(int row, int col){
+        row = legalRow(row);
+        col = legalCol(col);
+
+        if (buttonsMatrix[row][col].isDisabled() || controller.hasBomb(row,col))
+            return;
+
+        controller.click(row,col);
+        Button b = buttonsMatrix[row][col];
+        b.setDisable(true);
+
+        int n = controller.getNumber(row,col);
+        b.setGraphic(numberImage(n, buttonsMatrix[row][col]));
+        if(n > 0){
+            return;
+        }
+
+        clickEmptyBoxes(row-1,col-1);
+        clickEmptyBoxes(row+1,col-1);
+        clickEmptyBoxes(row+1,col+1);
+        clickEmptyBoxes(row-1,col+1);
+        clickEmptyBoxes(row+1,col);
+        clickEmptyBoxes(row-1,col);
+        clickEmptyBoxes(row,col-1);
+        clickEmptyBoxes(row,col+1);
+    }
+    private ImageView numberImage(int i, Button b){
+        Image img = switch (i) {
+            case 0 -> new Image("file:src/main/java/org/example/juego/resources/0.png");
+            case 1 -> new Image("file:src/main/java/org/example/juego/resources/1.png");
+            case 2 -> new Image("file:src/main/java/org/example/juego/resources/2.png");
+            case 3 -> new Image("file:src/main/java/org/example/juego/resources/3.png");
+            case 4 -> new Image("file:src/main/java/org/example/juego/resources/4.png");
+            case 5 -> new Image("file:src/main/java/org/example/juego/resources/5.png");
+            case 6 -> new Image("file:src/main/java/org/example/juego/resources/6.png");
+            case 7 -> new Image("file:src/main/java/org/example/juego/resources/7.png");
+            case 8 -> new Image("file:src/main/java/org/example/juego/resources/8.png");
+            case 9 -> new Image("file:src/main/java/org/example/juego/resources/9.png");
+            default -> null;
+        };
+
+        ImageView imgView = new ImageView(img);
+        imgView.fitWidthProperty().bind(b.widthProperty());
+        imgView.fitHeightProperty().bind(b.heightProperty());
+        imgView.setPreserveRatio(true);
+        return imgView;
     }
     private ImageView mineImage(){
         Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/Mine.png");
@@ -167,12 +250,21 @@ public class View {
 
         return mineImgView;
     }
-    private ImageView flagImage(){
+    private ImageView flagImage(Button b){
         Image flagIcon = new Image("file:src/main/java/org/example/juego/resources/redFlag.png");
         ImageView flagImgView = new ImageView(flagIcon);
-        flagImgView.setFitWidth(19);
-        flagImgView.setFitHeight(20);
+        flagImgView.fitWidthProperty().bind(b.widthProperty());
+        flagImgView.fitHeightProperty().bind(b.heightProperty());
+        flagImgView.setPreserveRatio(true);
         return flagImgView;
+    }
+    private ImageView blankImage(Button b){
+        Image blankIcon = new Image("file:src/main/java/org/example/juego/resources/blank.png");
+        ImageView blankImgView = new ImageView(blankIcon);
+        blankImgView.fitWidthProperty().bind(b.widthProperty());
+        blankImgView.fitHeightProperty().bind(b.heightProperty());
+        blankImgView.setPreserveRatio(true);
+        return blankImgView;
     }
     private ImageView loserSmileImage(){
         Image loserImg= new Image("file:src/main/java/org/example/juego/resources/cryFace.png");
@@ -181,7 +273,13 @@ public class View {
         loserImgView.setFitHeight(50);
         return loserImgView;
     }
-
+    private ImageView starEyesFaceImage(){
+        Image starEyesFaceImg= new Image("file:src/main/java/org/example/juego/resources/starEyes.png");
+        ImageView starEyesFaceImgView = new ImageView(starEyesFaceImg);
+        starEyesFaceImgView.setFitWidth(50);
+        starEyesFaceImgView.setFitHeight(50);
+        return starEyesFaceImgView;
+    }
     private void setSmileButton(Button smileButton){
         smileButton.setMinWidth(50);
         smileButton.setMinHeight(50);
