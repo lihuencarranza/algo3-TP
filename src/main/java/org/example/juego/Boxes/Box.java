@@ -8,6 +8,7 @@ public class Box {
 
     public Box(int number) {
         this.number = number;
+
     }
 
     public void setFlag() {
@@ -25,7 +26,7 @@ public class Box {
     public void printBox() {
         if (flag)
             System.out.print("|F|");
-        else if (visible == false)
+        else if (!visible)
             System.out.print("|x|");
         else if (bomb)
             System.out.print("|B|");
@@ -38,10 +39,7 @@ public class Box {
         return bomb;
     }
 
-    public boolean click() {
-        if (flag == true || visible == true) {
-            return false;
-        }
-        return true;
+    public boolean isClickeable() {
+        return !flag && !visible;
     }
 }

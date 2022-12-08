@@ -88,6 +88,7 @@ public class View {
                 switchScenes(scene2);
                 controller.startGame();
         });
+
     }
 
     private ImageView numberImage(int i){
@@ -144,15 +145,59 @@ public class View {
     }
     private void clickBombs(){
         controller.endGame();
-        for (Button b : buttonList){
+
+        for(Button b : buttonList){
             b.setGraphic(mineImage());
+            b.setDisable(true);
         }
         smileButton.setGraphic(setLoserSmile());
+    }
+
+    private void clickEmptyBoxesAround(int row, int col){
+        if (!controller.isClickable(row,col)){
+            System.out.println("tiene flag");
+            return;
+        }
+        System.out.println("no tiene flag");
+        Button b = new Button();
+        b.setDisable(true);
+        grid.add(b,row,col);
+        if (controller.getNumber(row,col) > 0){
+            clicknumber(b, row, col);
+            return;
+        }
+        clickEmptyBoxesAround(row-1, col-1);
+        clickEmptyBoxesAround(row-1, col+1);
+        clickEmptyBoxesAround(row+1, col-1);
+        clickEmptyBoxesAround(row+1, col+1);
+        clickEmptyBoxesAround(row-1, col);
+        clickEmptyBoxesAround(row+1, col);
+        clickEmptyBoxesAround(row, col-1);
+        clickEmptyBoxesAround(row, col+1);
+        return;
+    }
+
+    public void clicknumber(Button b, int row, int col){
+        int i = controller.getNumber(row,col);
+        b.setGraphic(numberImage(i));
+        b.setDisable(true);
+        controller.click(row, col);
+    }
+    public void disableButtons(){
+        /*for (int i = 0; i < model.getRows(); i++){
+            for (int j=0; j < model.getCols(); j++){
+                if (!controller.hasBomb(i,j) && !controller.isFlaged(i,j) && !controller.isVisible(i, j)){
+                    Button b = new Button();
+                    b.setDisable(true);
+                    grid.add(b, i, j);
+                }
+            }
+        }*/
+
     }
     private void setButtonInGridEvents(Button button, int col, int row){
 
         button.setOnMouseClicked(event -> {
-
             switch (event.getButton()){
                 case SECONDARY://#8
                     if (!controller.isFlaged(row, col)){
@@ -161,7 +206,6 @@ public class View {
                     }else if(controller.isFlaged(row, col)){
                         button.setGraphic(null);
                         controller.removeFlag(row,col);
-
                     }
                     break;
 
@@ -169,11 +213,13 @@ public class View {
                     if (!controller.isFlaged(row, col) && controller.hasBomb(row,col)){
                         button.setGraphic(mineImage());
                         button.setDisable(true);
+                        disableButtons();
                         clickBombs();
-                    }else if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10){
-                        int number = controller.getNumber(row,col);
-                        button.setGraphic(numberImage(number));
-                        button.setDisable(true);
+
+                    }else if(!controller.isFlaged(row,col) && controller.getNumber(row, col) == 0){
+                        clickEmptyBoxesAround(row,col);
+                    }if (!controller.isFlaged(row,col) && controller.getNumber(row, col) != 10){
+                        clicknumber(button, row, col);
                     }
                     break;
 
@@ -194,8 +240,8 @@ public class View {
     }
 
     private void setGrid(GridPane grid){
-        for (int i = 0; i < 10; i++){
-            for (int j=0; j < 10; j++){
+        for (int i = 0; i < model.getRows(); i++){
+            for (int j=0; j < model.getCols(); j++){
                 Button button = new Button();
                 setButtonInGrid(button, i , j);
                 if (controller.hasBomb(j, i))

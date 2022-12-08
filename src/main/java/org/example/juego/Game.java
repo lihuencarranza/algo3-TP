@@ -29,6 +29,10 @@ public class Game{
         return board.matrix[row][col].number == 10;
     }
 
+    public void clickBox(int row, int col){
+        board.matrix[row][col] = new Box(board.matrix[row][col].number);
+    }
+
 
     public Game(){
         board = new Board();

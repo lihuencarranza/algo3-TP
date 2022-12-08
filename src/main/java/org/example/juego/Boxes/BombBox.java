@@ -1,13 +1,15 @@
 package org.example.juego.Boxes;
 
 public class BombBox extends Box{
-    public BombBox() {
-        super(10);
+    public BombBox(int number) {
+        super(number);
+
         this.bomb = true;
     }
 
-    public static boolean clickBombBox() {
+    public boolean clickBombBox() {
         System.out.println("BOOM!");
+        super.visible = true;
         return true;
     }
 }

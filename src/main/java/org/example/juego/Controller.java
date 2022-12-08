@@ -1,8 +1,5 @@
 package org.example.juego;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
 public class Controller {
     private Model model;
     public Game game;
@@ -14,10 +11,12 @@ public class Controller {
     }
 
     void startGame(){
+        model.setLevel(1);
         game = new Game();
+
     }
 
-
+    public boolean isVisible(int row, int col){return !game.board.matrix[row][col].visible;}
     public void setFlag(int row, int col) {
          game.board.setFlagBox(row, col);
          this.availableFlags--;
@@ -25,6 +24,10 @@ public class Controller {
 
     public boolean isFlaged(int row, int col){
         return game.board.matrix[row][col].flag;
+    }
+
+    public boolean isClickable(int row, int col){
+        return game.board.matrix[row][col].isClickeable();
     }
 
     public void removeFlag(int row, int col){
@@ -36,16 +39,13 @@ public class Controller {
         return game.board.matrix[row][col].number;
     }
 
-    public boolean hasBomb(int row, int col){
-        return game.board.matrix[row][col].isABomb();
-    }
+    public boolean hasBomb(int row, int col){return game.board.matrix[row][col].isABomb();}
 
-    public void click(int row, int col){
+    public void click(int row, int col){game.clickBox(row,col); }
 
-    }
 
-    public int[][] endGame(){
-        return game.board.minesList;
+    public void endGame(){
+
     }
 
 
