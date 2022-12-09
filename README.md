@@ -1,5 +1,5 @@
 ## Trabajo Práctio de la materia Algorítmos y Programación III - Cátedra Corsi/Essaya/Maraggi
-
+## ETAPA 1
 ### Buscaminas
 
 El juego elegido es el buscaminas. Sus reglas están en este [enlace](https://es.wikipedia.org/wiki/Buscaminas).
@@ -12,7 +12,7 @@ Supongamos que tenemos un a matriz de 2x2, una bomba y tres casilleros con valor
 
 ![image](https://user-images.githubusercontent.com/86395729/201571569-21a5331c-82d5-4a13-97bb-0e788c92c01a.png)
 
-
+## ETAPA 2
 
 #### Nombres de las clases
 
@@ -29,10 +29,17 @@ En primer lugar, para organizarme y tener una idea clara de lo que estoy haciend
 Luego de crear una Bomba, creo su entorno. A cada box que esté conectado con la bomba se le sumará 1. De esta manera si ya están cerca de otra bomba, aumentará la cantidad de bombas cercanas (como es en las instrucciones del juego). 
 Una vez creadas las bombas y las casillas con numeros, queda agregar las casillas que no tienen nada cerca. Para esto agregué una clase llamada ClickedBox para que hereda se Box. Esta casilla no es más clickeable y tampoco puede ponersele una banderita.
 
-## Falta implementar
+## ETAPA 3
 
--Implementar bien la banderita
--Una mejor interfaz (hay que limpiar la pantalla porque queda todo feo).
--Creo que los nombres de las columnas y filas los tengo a veces bien y otras mal. Tengo que modificar bien esto.
+En la etapa anterior me falta implementar las banderitas. El problema que tenía es que si activaba una banderita en 
+una caja, se activaba en todas las de su tipo (ya que por el patron, son todas las cajas del mismo valor las mismas 
+pero en diferentes partes de la matriz). Entonces se me ocurrió crear otro vector con tipos de caja con banderita. 
+Aun que esto en la práctica funciona bien, en el trabajo visualmente hay un bug con la cantidad de banderas que quedan.
+
+Para los gráficos utilicé las imagenes de https://github.com/lxf44944/minesweeper_java
+
+En caso de perder el juego pero queres seguir jugando, hay que tocar la carita triste que se genera en su 
+correspondiente boton. Lo mismo sucede si se ganó el juego pero quiere jugar otra partida. 
+
 
 
