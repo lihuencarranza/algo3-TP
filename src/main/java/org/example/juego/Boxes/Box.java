@@ -23,16 +23,6 @@ public class Box {
         return number;
     }
 
-    public void printBox() {
-        if (flag)
-            System.out.print("|F|");
-        else if (bomb)
-            System.out.print("|B|");
-        else
-            System.out.print("|" + number + "|");
-
-    }
-
     public boolean isABomb() {
         return bomb;
     }

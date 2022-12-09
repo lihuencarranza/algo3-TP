@@ -16,11 +16,12 @@ public class View {
     private Button[][] buttonsMatrix;
     private final Stage stage;
     private Scene scene1;
-    private Scene scene2;
     private Scene sceneRules;
     private final Stage stageRules;
     private final Stage wonMessageStage;
     private Button smileButton;
+    private Button askButton;
+    private Button flagsQButton;
 
     public View(Stage stage,  Controller controller){
 
@@ -30,8 +31,7 @@ public class View {
         stage.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
         stage.setResizable(false);
 
-        scene1 = createInitialScene();
-        scene2 = createGameScene();
+        scene1 = createGameScene();
 
         stageRules = createRulesStage();
         sceneRules = createRulesScene();
@@ -87,47 +87,13 @@ public class View {
         return s;
     }
 
-    private Scene createInitialScene() {
-
-        Button startButton = setStartButton();
-        Button rulesButton = setRulesButton();
-
-        Label label = new Label("");
-        VBox vBox = new VBox(label, startButton, rulesButton);
-        BackgroundSize backgroundSize = new BackgroundSize(350,
-                425,
-                true,
-                true,
-                true,
-                false);
-        BackgroundImage image = new BackgroundImage(new Image("file:src/main/java/org/example/juego/resources/background.png"),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                backgroundSize);
-
-        vBox.setBackground(new Background(image));
 
 
-        vBox.setSpacing(30);
-        vBox.setAlignment(Pos.CENTER);
-        scene1 = new Scene(vBox,350,425);
-        return scene1;
-    }
-    private Button setStartButton(){
-        Button b = new Button();
-        b.setMaxSize(120,55);
-        b.setMinSize(120,55);
-        b.setGraphic(startImage(b));
-
-        b.setOnAction(e -> switchScenes(scene2));
-        return b;
-    }
     private Button setRulesButton(){
         Button b = new Button();
         b.setMaxSize(120,55);
         b.setMinSize(120,55);
-        b.setGraphic(rulesImage(b));
+        b.setGraphic(askImage());
         b.setOnAction(e -> stageRules.show());
         return b;
     }
@@ -136,21 +102,28 @@ public class View {
 
         controller.startGame();
         smileButton = new Button();
-        setSmileButton(smileButton);
+        askButton = new Button();
+        flagsQButton = new Button();
+        setAskButton();
+        setSmileButton();
+        setFlagQButton();
+
         buttonsMatrix = new Button[10][10];
         GridPane grid = new GridPane();
         setGrid(grid);
 
-        HBox hBox = new HBox(smileButton);
+        HBox hBox = new HBox(askButton, smileButton,flagsQButton);
         hBox.setAlignment(Pos.CENTER);
+        hBox.setSpacing(40);
 
         VBox vBox = new VBox(hBox, grid);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(15);
-        scene2 = new Scene(vBox);
+        scene1 = new Scene(vBox);
 
-        return scene2;
+        return scene1;
     }
+
+
 
     private void setGrid(GridPane grid){
 
@@ -178,10 +151,14 @@ public class View {
                     if(!controller.isFlaged(row,col)){
                         button.setGraphic(flagImage(button));
                         controller.setFlag(row,col);
-                        checkGame();
+                        if(controller.availableFlags == 0)
+                            checkGame();
+                        setFlagQButton();
+
                     }else{
                         button.setGraphic(blankImage(button));
                         controller.removeFlag(row,col);
+                        setFlagQButton();
                     }
                     break;
 
@@ -196,7 +173,6 @@ public class View {
                     }
                     break;
             }
-            controller.game.board.printBoard();
 
         });
     }
@@ -311,20 +287,11 @@ public class View {
         imgView.setPreserveRatio(true);
         return imgView;
     }
-    private ImageView startImage(Button b){
-        Image startIcon = new Image("file:src/main/java/org/example/juego/resources/start.png");
-        ImageView startImgView = new ImageView(startIcon);
-        startImgView.fitWidthProperty().bind(b.widthProperty());
-        startImgView.fitHeightProperty().bind(b.heightProperty());
-        startImgView.setPreserveRatio(true);
-        return startImgView;
-    }
-    private ImageView rulesImage(Button b){
-        Image rulesIcon = new Image("file:src/main/java/org/example/juego/resources/rules.png");
+    private ImageView askImage(){
+        Image rulesIcon = new Image("file:src/main/java/org/example/juego/resources/ask.png");
         ImageView rulesImgView = new ImageView(rulesIcon);
-        rulesImgView.fitWidthProperty().bind(b.widthProperty());
-        rulesImgView.fitHeightProperty().bind(b.heightProperty());
-        rulesImgView.setPreserveRatio(true);
+        rulesImgView.fitWidthProperty().bind(askButton.widthProperty());
+        rulesImgView.fitHeightProperty().bind(askButton.heightProperty());
         return rulesImgView;
     }
     private ImageView bloodImage(Button b){
@@ -382,18 +349,49 @@ public class View {
         smileImgView.setPreserveRatio(true);
         return smileImgView;
     }
+    private ImageView flagQImage(){
+        Image img = switch (controller.availableFlags) {
+            case 1 -> new Image("file:src/main/java/org/example/juego/resources/01.png");
+            case 2 -> new Image("file:src/main/java/org/example/juego/resources/02.png");
+            case 3 -> new Image("file:src/main/java/org/example/juego/resources/03.png");
+            case 4 -> new Image("file:src/main/java/org/example/juego/resources/04.png");
+            case 5 -> new Image("file:src/main/java/org/example/juego/resources/05.png");
+            case 6 -> new Image("file:src/main/java/org/example/juego/resources/06.png");
+            case 7 -> new Image("file:src/main/java/org/example/juego/resources/07.png");
+            case 8 -> new Image("file:src/main/java/org/example/juego/resources/08.png");
+            case 9 -> new Image("file:src/main/java/org/example/juego/resources/09.png");
+            case 0 -> new Image("file:src/main/java/org/example/juego/resources/00.png");
+            case 10 -> new Image("file:src/main/java/org/example/juego/resources/10.png");
+            default -> null;
+        };
+        ImageView imgView = new ImageView(img);
+        imgView.fitWidthProperty().bind(flagsQButton.widthProperty());
+        imgView.fitHeightProperty().bind(flagsQButton.heightProperty());
+        imgView.setPreserveRatio(true);
+        return imgView;
+    }
 
-    private void setSmileButton(Button smileButton){
-        smileButton.setMinSize(50,50);
-        smileButton.setMaxSize(50,50);
+    private void setSmileButton(){
+        smileButton.setMinSize(65,65);
+        smileButton.setMaxSize(65,65);
         smileButton.setGraphic(neutralSmile());
         smileButton.setOnMouseClicked(event -> {
-            scene2 = createGameScene();
+            scene1 = createGameScene();
             controller.startGame();
-            switchScenes(scene2);
+            switchScenes(scene1);
 
         });
 
     }
-
+    private void setAskButton(){
+        askButton.setMinSize(65,65);
+        askButton.setMaxSize(65,65);
+        askButton.setGraphic(askImage());
+        askButton.setOnAction(e -> stageRules.show());
+    }
+    private void setFlagQButton(){
+        flagsQButton.setMinSize(70,60);
+        flagsQButton.setMaxSize(70,60);
+        flagsQButton.setGraphic(flagQImage());
+    }
 }

@@ -103,14 +103,6 @@ public class Board {
         }
     }
 
-    public void printBoard() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                matrix[i][j].printBox();
-            }
-            System.out.println();
-        }
-    }
 
     public boolean clickBox(int row, int col) {
         if (matrix[row][col].bomb) {
