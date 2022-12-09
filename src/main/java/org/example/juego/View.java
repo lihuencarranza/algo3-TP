@@ -16,8 +16,11 @@ public class View {
     private Button[][] buttonsMatrix;
     private final Stage stage;
     private Scene scene1;
-
     private Scene scene2;
+    private Scene sceneRules;
+    private Stage stageRules;
+    private Stage wonMessageStage;
+    private Scene wonMessageScene;
     private Button smileButton;
 
     public View(Stage stage,  Controller controller){
@@ -31,12 +34,58 @@ public class View {
         scene1 = createInitialScene();
         scene2 = createGameScene();
 
+        stageRules = createRulesStage();
+        sceneRules = createRulesScene();
+
+        wonMessageStage = createWonMessageStage();
+
         stage.setScene(scene1);
 
         stage.show();
     }
     public void switchScenes(Scene scene) {
         stage.setScene(scene);
+    }
+
+    private Stage createRulesStage(){
+        Stage s = new Stage();
+        s.setTitle("Rules");
+        s.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
+        s.setResizable(false);
+        return s;
+    }
+    private Scene createRulesScene(){
+
+        VBox vbox1 = new VBox();
+        vbox1.setStyle("-fx-background-color: green");
+        Scene s = new Scene(vbox1, 800, 500);
+        return s;
+    }
+
+    private Stage createWonMessageStage(){
+        Stage s = new Stage();
+        s.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
+        s.setResizable(false);
+        VBox vBox = new VBox();
+
+        BackgroundSize backgroundSize = new BackgroundSize(200,
+                100,
+                true,
+                true,
+                true,
+                false);
+        BackgroundImage image = new BackgroundImage(new Image("file:src/main/java/org/example/juego/resources/youWon.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                backgroundSize);
+
+        vBox.setBackground(new Background(image));
+
+        wonMessageScene = new Scene(vBox, 200, 90);
+        s.setScene(wonMessageScene);
+
+        return s;
     }
 
     private Scene createInitialScene() {
@@ -54,16 +103,20 @@ public class View {
         return scene1;
     }
     private Button setStartButton(){
-        Button b = new Button("start");
-        b.setMinHeight(50);
-        b.setMinWidth(100);
+        Button b = new Button();
+        b.setMaxSize(120,55);
+        b.setMinSize(120,55);
+        b.setGraphic(startImage(b));
+
         b.setOnAction(e -> switchScenes(scene2));
         return b;
     }
     private Button setRulesButton(){
-        Button b = new Button("rules");
-        b.setMinHeight(50);
-        b.setMinWidth(100);
+        Button b = new Button();
+        b.setMaxSize(120,55);
+        b.setMinSize(120,55);
+        b.setGraphic(rulesImage(b));
+        b.setOnAction(e -> stageRules.show());
         return b;
     }
 
@@ -101,12 +154,9 @@ public class View {
 
     }
     private void setButtonInGrid(Button button, int row, int col){
-
-        button.setMinWidth(35);
-        button.setMinHeight(35);
+        button.setMinSize(35,35);
         button.setCancelButton(true);
         button.setGraphic(blankImage(button));
-        //blankImage(button);
         setButtonInGridEvents(button, row, col);
     }
     private void setButtonInGridEvents(Button button, int col, int row){
@@ -118,7 +168,7 @@ public class View {
                         controller.setFlag(row,col);
                         checkGame();
                     }else{
-                        button.setGraphic(null);
+                        button.setGraphic(blankImage(button));
                         controller.removeFlag(row,col);
                     }
                     break;
@@ -146,22 +196,11 @@ public class View {
     public void endGame(boolean result){
         if(result){
             smileButton.setGraphic(starEyesFaceImage());
-
-
+            controller.endGame(true);
+            wonMessageStage.show();
         }else {
+            controller.endGame(false);
             smileButton.setGraphic(loserSmileImage());}
-    }
-    public void  disableButtons(){
-        Button b;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                b = buttonsMatrix[i][j];
-                if (!b.isDisabled()){
-                    b.setGraphic(blankImage(b));
-                }
-
-            }
-        }
     }
     private boolean validateFlagInBomb(){
         Button b;
@@ -238,6 +277,7 @@ public class View {
         clickEmptyBoxes(row,col-1);
         clickEmptyBoxes(row,col+1);
     }
+
     private ImageView numberImage(int i, Button b){
         Image img = switch (i) {
             case 0 -> new Image("file:src/main/java/org/example/juego/resources/0.png");
@@ -258,6 +298,22 @@ public class View {
         imgView.fitHeightProperty().bind(b.heightProperty());
         imgView.setPreserveRatio(true);
         return imgView;
+    }
+    private ImageView startImage(Button b){
+        Image startIcon = new Image("file:src/main/java/org/example/juego/resources/start.png");
+        ImageView startImgView = new ImageView(startIcon);
+        startImgView.fitWidthProperty().bind(b.widthProperty());
+        startImgView.fitHeightProperty().bind(b.heightProperty());
+        startImgView.setPreserveRatio(true);
+        return startImgView;
+    }
+    private ImageView rulesImage(Button b){
+        Image rulesIcon = new Image("file:src/main/java/org/example/juego/resources/rules.png");
+        ImageView rulesImgView = new ImageView(rulesIcon);
+        rulesImgView.fitWidthProperty().bind(b.widthProperty());
+        rulesImgView.fitHeightProperty().bind(b.heightProperty());
+        rulesImgView.setPreserveRatio(true);
+        return rulesImgView;
     }
     private ImageView bloodImage(Button b){
         Image mineIcon = new Image("file:src/main/java/org/example/juego/resources/blood.png");
@@ -294,8 +350,9 @@ public class View {
     private ImageView loserSmileImage(){
         Image loserImg= new Image("file:src/main/java/org/example/juego/resources/cryFace.png");
         ImageView loserImgView = new ImageView(loserImg);
-        loserImgView.setFitWidth(50);
-        loserImgView.setFitHeight(50);
+        loserImgView.fitWidthProperty().bind(smileButton.widthProperty());
+        loserImgView.fitHeightProperty().bind(smileButton.heightProperty());
+        loserImgView.setPreserveRatio(true);
         return loserImgView;
     }
     private ImageView starEyesFaceImage(){
@@ -305,15 +362,19 @@ public class View {
         starEyesFaceImgView.setFitHeight(50);
         return starEyesFaceImgView;
     }
-    private void setSmileButton(Button smileButton){
-        smileButton.setMinWidth(50);
-        smileButton.setMinHeight(50);
+    private ImageView neutralSmile(){
         Image smileIcon = new Image("file:src/main/java/org/example/juego/resources/smile.png");
         ImageView smileImgView = new ImageView(smileIcon);
-        smileImgView.setFitHeight(50);
+        smileImgView.fitWidthProperty().bind(smileButton.widthProperty());
+        smileImgView.fitHeightProperty().bind(smileButton.heightProperty());
         smileImgView.setPreserveRatio(true);
-        smileButton.setGraphic(smileImgView);
+        return smileImgView;
+    }
 
+    private void setSmileButton(Button smileButton){
+        smileButton.setMinSize(50,50);
+        smileButton.setMaxSize(50,50);
+        smileButton.setGraphic(neutralSmile());
         smileButton.setOnMouseClicked(event -> {
             scene2 = createGameScene();
             controller.startGame();

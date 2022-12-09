@@ -5,15 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.example.juego.Game;
-import org.example.juego.Menu;
 import org.example.juego.Boxes.Box;
 
 public class GameTest {
-    @Test
-    public void invocarMenuFunciona() {
-        Menu menu = new Menu();
-        assertNotNull(menu);
-    }
+
 
     @Test
     public void inicializarGame() {

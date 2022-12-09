@@ -11,19 +11,19 @@ public class BoxTest {
     @Test
     public void createABomb()
     {
-        Box box = new BombBox();
+        Box box = new BombBox(10);
         assertTrue(box.isABomb());
     }
 
     @Test
     public void bombsNumberIs10(){
-        Box box = new BombBox();
+        Box box = new BombBox(10);
         assertEquals(10, box.getNumber());
     }
 
     @Test
     public void bombsFlagisFalse(){
-        Box box = new BombBox();
+        Box box = new BombBox(10);
         assertFalse(box.flag);
     }
 
@@ -62,7 +62,7 @@ public class BoxTest {
     }
 
     @Test
-    public void clickedBoxFlagisFalse(){
+    public void clickedBoxFlagsFalse(){
         ClickedBox box = new ClickedBox(0);
         assertFalse(box.flag);
     }
@@ -76,7 +76,7 @@ public class BoxTest {
 
     @Test
     public void setFlagInABomb(){
-        Box box = new BombBox();
+        Box box = new BombBox(10);
         box.setFlag();
         assertTrue(box.flag);
     }
@@ -85,14 +85,14 @@ public class BoxTest {
     public void cantClickAFlag(){
         Box box = new Box(0);
         box.setFlag();
-        boolean i = box.click();
+        boolean i = box.isClickable();
         assertFalse(i);
     }
 
     @Test
     public void cantClickAClickedBox(){
         Box box = new ClickedBox(0);
-        boolean i = box.click();
+        boolean i = box.isClickable();
         assertFalse(i);
     }
 }

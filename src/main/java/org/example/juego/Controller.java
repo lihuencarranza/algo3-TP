@@ -43,8 +43,8 @@ public class Controller {
     public void click(int row, int col){game.clickBox(row,col); }
 
 
-    public void endGame(){
-
+    public void endGame(boolean b){
+        game.setState(b);
     }
 
 
