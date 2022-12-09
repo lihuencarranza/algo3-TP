@@ -1,5 +1,7 @@
 package org.example.juego;
 
+import java.lang.constant.Constable;
+
 public class Controller {
     public Game game;
 
@@ -15,6 +17,13 @@ public class Controller {
         availableFlags = 10;
     }
 
+    public String getGameRules() {
+
+        return "Minesweeper is a game where mines are hidden in a grid of squares. Safe squares have numbers telling " +
+                "you how many mines touch the square. You can use the number clues to solve the game by opening all " +
+                "of the safe squares. If you click on a mine you lose the game!\n You open squares with the left " +
+                "mouse button and put flags on mines with the right mouse button.When you open a square that does not touch any mines, it will be empty and the adjacent squares will automatically open in all directions until reaching squares that contain numbers. A common strategy for starting games is to randomly click until you get a big opening with lots of numbers.\n ";
+    }
     public boolean isVisible(int row, int col){return !game.board.matrix[row][col].visible;}
     public void setFlag(int row, int col) {
          game.board.setFlagBox(row, col);

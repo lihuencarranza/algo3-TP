@@ -5,9 +5,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -16,6 +18,8 @@ public class View {
     private final Controller controller;
     private Button[][] buttonsMatrix;
     private final Stage stage;
+    private Stage stageRules;
+    private Scene sceneRules;
     private Scene scene1;
     private final Stage wonMessageStage;
     private Button smileButton;
@@ -31,6 +35,7 @@ public class View {
         stage.setResizable(false);
 
         scene1 = createGameScene();
+        createRulesScene();
 
         wonMessageStage = createWonMessageStage();
 
@@ -66,7 +71,24 @@ public class View {
 
         return s;
     }
+    private void createRulesScene(){
+        stageRules = new Stage();
+        stageRules.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
+        Label label = new Label(controller.getGameRules());
+        label.setWrapText(true);
+        stageRules.setTitle("How to play Minesweeper");
 
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(label);
+        borderPane.setPadding(new Insets(50,20,50,20));
+
+
+        sceneRules = new Scene(borderPane, 410,300, Color.GRAY);
+
+        stageRules.setScene(sceneRules);
+
+
+    }
     private Scene createGameScene() {
 
         controller.startGame();
@@ -353,7 +375,7 @@ public class View {
         askButton.setMinSize(65,65);
         askButton.setMaxSize(65,65);
         askButton.setGraphic(askImage());
-
+        askButton.setOnMouseClicked(e-> stageRules.show());
         return askButton;
     }
     private void setFlagQButton(){
