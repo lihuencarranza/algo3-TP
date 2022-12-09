@@ -23,6 +23,10 @@ public class Game{
             state = State.LOST;
     }
 
+    public boolean getState(){
+        return state == State.WON;
+    }
+
 
     public Game(){
         board = new Board();
