@@ -18,9 +18,8 @@ public class View {
     private Scene scene1;
     private Scene scene2;
     private Scene sceneRules;
-    private Stage stageRules;
-    private Stage wonMessageStage;
-    private Scene wonMessageScene;
+    private final Stage stageRules;
+    private final Stage wonMessageStage;
     private Button smileButton;
 
     public View(Stage stage,  Controller controller){
@@ -82,7 +81,7 @@ public class View {
 
         vBox.setBackground(new Background(image));
 
-        wonMessageScene = new Scene(vBox, 200, 90);
+        Scene wonMessageScene = new Scene(vBox, 200, 90);
         s.setScene(wonMessageScene);
 
         return s;
@@ -93,10 +92,23 @@ public class View {
         Button startButton = setStartButton();
         Button rulesButton = setRulesButton();
 
-
-        Label label = new Label("hola");
-
+        Label label = new Label("");
         VBox vBox = new VBox(label, startButton, rulesButton);
+        BackgroundSize backgroundSize = new BackgroundSize(350,
+                425,
+                true,
+                true,
+                true,
+                false);
+        BackgroundImage image = new BackgroundImage(new Image("file:src/main/java/org/example/juego/resources/background.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                backgroundSize);
+
+        vBox.setBackground(new Background(image));
+
+
         vBox.setSpacing(30);
         vBox.setAlignment(Pos.CENTER);
         scene1 = new Scene(vBox,350,425);
