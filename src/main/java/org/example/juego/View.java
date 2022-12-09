@@ -1,9 +1,10 @@
 package org.example.juego;
 
+
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,8 +17,6 @@ public class View {
     private Button[][] buttonsMatrix;
     private final Stage stage;
     private Scene scene1;
-    private Scene sceneRules;
-    private final Stage stageRules;
     private final Stage wonMessageStage;
     private Button smileButton;
     private Button askButton;
@@ -33,32 +32,13 @@ public class View {
 
         scene1 = createGameScene();
 
-        stageRules = createRulesStage();
-        sceneRules = createRulesScene();
-
         wonMessageStage = createWonMessageStage();
 
         stage.setScene(scene1);
-
         stage.show();
     }
     public void switchScenes(Scene scene) {
         stage.setScene(scene);
-    }
-
-    private Stage createRulesStage(){
-        Stage s = new Stage();
-        s.setTitle("Rules");
-        s.getIcons().add(new Image("file:src/main/java/org/example/juego/resources/icon.png"));
-        s.setResizable(false);
-        return s;
-    }
-    private Scene createRulesScene(){
-
-        VBox vbox1 = new VBox();
-        vbox1.setStyle("-fx-background-color: green");
-        Scene s = new Scene(vbox1, 800, 500);
-        return s;
     }
 
     private Stage createWonMessageStage(){
@@ -87,22 +67,11 @@ public class View {
         return s;
     }
 
-
-
-    private Button setRulesButton(){
-        Button b = new Button();
-        b.setMaxSize(120,55);
-        b.setMinSize(120,55);
-        b.setGraphic(askImage());
-        b.setOnAction(e -> stageRules.show());
-        return b;
-    }
-
     private Scene createGameScene() {
 
         controller.startGame();
         smileButton = new Button();
-        askButton = new Button();
+        askButton = setAskButton();
         flagsQButton = new Button();
         setAskButton();
         setSmileButton();
@@ -115,6 +84,7 @@ public class View {
         HBox hBox = new HBox(askButton, smileButton,flagsQButton);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(40);
+        hBox.setPadding(new Insets(5,0,5,0));
 
         VBox vBox = new VBox(hBox, grid);
         vBox.setAlignment(Pos.CENTER);
@@ -123,11 +93,7 @@ public class View {
         return scene1;
     }
 
-
-
     private void setGrid(GridPane grid){
-
-        int h = 0;
         for (int i = 0; i < 10; i++){
             for (int j=0; j < 10; j++){
                 Button button = new Button();
@@ -148,7 +114,7 @@ public class View {
         button.setOnMouseClicked(event -> {
             switch (event.getButton()){
                 case SECONDARY:
-                    if(!controller.isFlaged(row,col)){
+                    if(!controller.isFlaged(row,col) && controller.availableFlags > 0){
                         button.setGraphic(flagImage(button));
                         controller.setFlag(row,col);
                         if(controller.availableFlags == 0)
@@ -191,10 +157,8 @@ public class View {
             smileButton.setGraphic(loserSmileImage());}
     }
     private boolean validateFlagInBomb(){
-        Button b;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++){
-                b = buttonsMatrix[i][j];
                 if (controller.hasBomb(i, j) && !controller.isFlaged(i, j)) {
                     return false;
                 }
@@ -337,8 +301,9 @@ public class View {
     private ImageView starEyesFaceImage(){
         Image starEyesFaceImg= new Image("file:src/main/java/org/example/juego/resources/starEyes.png");
         ImageView starEyesFaceImgView = new ImageView(starEyesFaceImg);
-        starEyesFaceImgView.setFitWidth(50);
-        starEyesFaceImgView.setFitHeight(50);
+        starEyesFaceImgView.fitWidthProperty().bind(smileButton.widthProperty());
+        starEyesFaceImgView.fitHeightProperty().bind(smileButton.heightProperty());
+        starEyesFaceImgView.setPreserveRatio(true);
         return starEyesFaceImgView;
     }
     private ImageView neutralSmile(){
@@ -383,11 +348,13 @@ public class View {
         });
 
     }
-    private void setAskButton(){
+    private Button setAskButton(){
+        askButton = new Button();
         askButton.setMinSize(65,65);
         askButton.setMaxSize(65,65);
         askButton.setGraphic(askImage());
-        askButton.setOnAction(e -> stageRules.show());
+
+        return askButton;
     }
     private void setFlagQButton(){
         flagsQButton.setMinSize(70,60);

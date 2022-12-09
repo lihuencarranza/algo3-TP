@@ -3,7 +3,7 @@ package org.example.juego;
 public class Controller {
     public Game game;
 
-    public int availableFlags = 10;
+    public int availableFlags;
 
     public Controller() {
 
@@ -12,7 +12,7 @@ public class Controller {
     void startGame(){
 
         game = new Game();
-
+        availableFlags = 10;
     }
 
     public boolean isVisible(int row, int col){return !game.board.matrix[row][col].visible;}
