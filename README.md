@@ -10,7 +10,7 @@ Se utilizará el patrón Flyweight. En el juego habrá casillas con diferentes v
 
 Supongamos que tenemos un a matriz de 2x2, una bomba y tres casilleros con valor 1. Como son cuatro casilleros, en vez de crear 4 objetos con diferentes atributos, se crea una clase para el "estado" del casillero. Esta clase almacena los estados posibles de los casilleros y en caso de crear uno nuevo busca en los estados ya existentes.
 
-![image](https://www.plantuml.com/plantuml/png/POzDIiSm4CNtESKiAveB596ge1Tm9owIT2p5f5Fo8ItLkpjfYgd-Du5vytilRxeGbO_9MM6i2W6UbKFO15nhMZ102m-qlAmplhwnPkneFfehyIqEcfVCIdHpN9dLH1RLnCgbcptLzAHC9BzkXSn4-FlJWF4OctUhXXkEThgyzvxIr9zAFEPMsEzTvESOHcsnXUWJdeiwNO0SKRUimUsNbBGV_ZkUCgjsP8ZQ7qZAE_YdPRQaYGwdFZdx0m00)
+![image](https://www.plantuml.com/plantuml/png/RL2z3i8W4DvvYXiroWiq3eqc-W9kJGUWDn2XD41D6_NTFR0D7Lp8Tz_FVK0Tel1nj8Of8qA0cx08BmO7wIOCKC7PJVTvmAObJXcj7hiz-x35JI9vETeXpkILpXaKFJ5hsehezTIq5D-6ha95v-UKfId9X59Do8L7EgpCu98giIDS5YnYIak25KG_Of5B93cUEcXfi9Y8XnFdBZ_rDxqvNvSMOjDSRfoIy8VAkshiE_h9Bm00)
 
 ## ETAPA 2
 
