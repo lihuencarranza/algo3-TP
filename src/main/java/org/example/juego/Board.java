@@ -108,41 +108,18 @@ public class Board {
             return true;
         } else {
             matrix[row][col] = BoxFactory.createClickedBox(matrix[row][col].number);
-            //clickNeighbours( row, col);
         }
         return false;
     }
 
-    public void clickNeighbours(int row, int col){
-        int colStart = col - 1;
-        int colEnd = col + 1;
-        int rowStart = row - 1;
-        int rowEnd = row + 1;
 
-        if (colStart < 0) {
-            colStart = 0;
-        }
-        if (colEnd > rows-1) {
-            colEnd = rows-1;
-        }
-        if (rowStart < 0) {
-            rowStart = 0;
-        }
-        if (rowEnd > columns-1) {
-            rowEnd = columns-1;
-        }
 
-        for (int i = rowStart; i <= rowEnd; i++) {
-            for (int j = colStart; j <= colEnd; j++) {
-                if (matrix[i][j].number == 0 && !matrix[i][j].visible) {
-                    matrix[i][j] = BoxFactory.createClickedBox(matrix[i][j].number);
-                    clickNeighbours(i, j);
-                } else if (matrix[i][j].number != 10 && !matrix[i][j].visible) {
-                    matrix[i][j] = BoxFactory.createClickedBox(matrix[i][j].number);
-                }
+    public void unableAllBoxes() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j].visible = true;
             }
         }
-
     }
 
     public void setFlagBox( int row, int col) {

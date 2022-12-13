@@ -19,8 +19,11 @@ public class Game{
     public void setState(boolean b){
         if (b)
             state = State.WON;
-        else
+        else{
             state = State.LOST;
+            board.unableAllBoxes();
+        }
+
     }
 
     public boolean getState(){
