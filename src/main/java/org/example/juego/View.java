@@ -136,7 +136,7 @@ public class View {
         button.setOnMouseClicked(event -> {
             switch (event.getButton()){
                 case SECONDARY:
-                    if(!controller.isFlaged(row,col) && controller.availableFlags > 0){
+                    if(controller.isClickable(row,col) && controller.availableFlags > 0){
                         button.setGraphic(flagImage(button));
                         controller.setFlag(row,col);
                         if(controller.availableFlags == 0)
@@ -151,12 +151,12 @@ public class View {
                     break;
 
                 case PRIMARY:
-                    if(!controller.isFlaged(row,col) && controller.hasBomb(row,col)) {
+                    if(controller.isClickable(row,col) && controller.hasBomb(row,col)) {
                         clickAllBombs(row,col);
                         endGame(false);
-                    }else if (!controller.isFlaged(row,col) && controller.getNumber(row,col) == 0){
+                    }else if (controller.isClickable(row,col) && controller.getNumber(row,col) == 0){
                         clickEmptyBoxes(row,col);
-                    }else if(!controller.isFlaged(row,col)){
+                    }else if(controller.isClickable(row,col)){
                         clickNumberBox(button,row,col);
                     }
                     break;
@@ -181,7 +181,7 @@ public class View {
     private boolean validateFlagInBomb(){
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++){
-                if (controller.hasBomb(i, j) && !controller.isFlaged(i, j)) {
+                if (controller.hasBomb(i, j) && controller.isClickable(i,j)) {
                     return false;
                 }
             }
