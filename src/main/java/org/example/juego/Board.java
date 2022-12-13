@@ -91,8 +91,6 @@ public class Board {
 
     }
 
-
-
     private void createEmptyBoxes(){
         for (int i = 0; i < rows; i++) {
             for  (int j = 0; j < columns; j++){
@@ -150,14 +148,14 @@ public class Board {
     public void setFlagBox( int row, int col) {
         if (!matrix[row][col].visible) {
             int i = matrix[row][col].number;
-            matrix[row][col] = BoxFactory.createClickedBox(i);
-            matrix[row][col].setFlag();
+            matrix[row][col] = BoxFactory.createFlagBox(i);
         }
     }
 
     public void unsetFlag(int row, int col){
         if (matrix[row][col].flag){
-            matrix[row][col].unsetFlag();
+            int i = matrix[row][col].getNumber();
+            matrix[row][col] = BoxFactory.createBox(i);
         }
     }
 

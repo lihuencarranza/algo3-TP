@@ -6,7 +6,6 @@ import org.example.juego.Boxes.BombBox;
 import org.example.juego.Boxes.FlagBox;
 
 public class BoxFactory {
-    public static enum Type { BOMB, BOX, CLICK, FLAG };
     private static final BombBox bombBox = new BombBox(10);
     private static final Box[] box = new Box[11];
     private static final ClickedBox[] clickedBox = new ClickedBox[11];
