@@ -149,7 +149,8 @@ public class Board {
 
     public void setFlagBox( int row, int col) {
         if (!matrix[row][col].visible) {
-            matrix[row][col] = new Box(matrix[row][col].number);
+            int i = matrix[row][col].number;
+            matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, i);
             matrix[row][col].setFlag();
         }
     }
