@@ -2,7 +2,7 @@ package org.example.juego;
 
 
 public class Game{
-    public static enum State { PLAYING, LOST, WON };
+    public enum State { PLAYING, LOST, WON }
     private State state;
     public Board board;
     public final int flags = 10;
@@ -13,13 +13,14 @@ public class Game{
     }
 
     public void clickBox(int row, int col){
-        board.matrix[row][col] = BoxFactory.createClickedBox(board.matrix[row][col].getNumber());
+        board.clickBox(row,col);
     }
 
     public void setState(boolean b){
-        if (b)
+        if (b) {
             state = State.WON;
-        else{
+            board.unableAllBoxes();
+        }else{
             state = State.LOST;
             board.unableAllBoxes();
         }
@@ -34,6 +35,7 @@ public class Game{
     public Game(){
         board = new Board();
         state = State.PLAYING;
+        board.enableBoxes();
     }
 
 

@@ -12,7 +12,7 @@ public class Controller {
     void startGame(){
 
         game = new Game();
-        availableFlags = 10;
+        availableFlags = game.flags;
     }
 
     public String getGameRules() {

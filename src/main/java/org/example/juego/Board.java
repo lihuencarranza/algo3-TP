@@ -57,8 +57,6 @@ public class Board {
         createEmptyBoxes();
     }
 
-
-
     private void createNumberBoxes(int rowBomb, int colBomb){
         int colStart = colBomb - 1;
         int colEnd = colBomb + 1;
@@ -101,23 +99,22 @@ public class Board {
         }
     }
 
-
-    public boolean clickBox(int row, int col) {
-        if (matrix[row][col].bomb) {
-            matrix[row][col].visible = true;
-            return true;
-        } else {
-            matrix[row][col] = BoxFactory.createClickedBox(matrix[row][col].number);
-        }
-        return false;
+    public void clickBox(int row, int col) {
+        matrix[row][col] = BoxFactory.createClickedBox(matrix[row][col].number);
     }
-
-
 
     public void unableAllBoxes() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 matrix[i][j].visible = true;
+            }
+        }
+    }
+
+    public void enableBoxes(){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j].visible = false;
             }
         }
     }
@@ -135,7 +132,6 @@ public class Board {
             matrix[row][col] = BoxFactory.createBox(i);
         }
     }
-
 
     public Box getBox(int row, int col) {
         return matrix[row][col];
