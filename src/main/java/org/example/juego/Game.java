@@ -13,7 +13,7 @@ public class Game{
     }
 
     public void clickBox(int row, int col){
-        board.matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, board.matrix[row][col].getNumber());
+        board.matrix[row][col] = BoxFactory.createClickedBox(board.matrix[row][col].getNumber());
     }
 
     public void setState(boolean b){
