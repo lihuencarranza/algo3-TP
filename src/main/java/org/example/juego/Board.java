@@ -44,7 +44,7 @@ public class Board {
         int i = 0;
         while (i < mines) {
             if (matrix[rRow][rCol] == null || !matrix[rRow][rCol].bomb) {
-                matrix[rRow][rCol] = BoxFactory.createBox(BoxFactory.Type.BOMB, 10);
+                matrix[rRow][rCol] = BoxFactory.createBomb();
                 i++;
                 createNumberBoxes(rRow, rCol);
                 minesList[i][0]=rRow;
@@ -82,9 +82,9 @@ public class Board {
         for  (int i = rowStart; i <= rowEnd; i++){
             for (int j = colStart; j <= colEnd; j++) {
                 if (matrix[i][j] == null) {
-                    matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.BOX, 1);
+                    matrix[i][j] = BoxFactory.createBox(1);
                 } else if (!matrix[i][j].bomb) {
-                    matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.BOX, matrix[i][j].number + 1);
+                    matrix[i][j] = BoxFactory.createBox(matrix[i][j].number + 1);
                 }
             }
         }
@@ -97,7 +97,7 @@ public class Board {
         for (int i = 0; i < rows; i++) {
             for  (int j = 0; j < columns; j++){
                 if (matrix[i][j] == null) {
-                    matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.BOX, 0);
+                    matrix[i][j] = BoxFactory.createBox(0);
                 }
             }
         }
@@ -109,7 +109,7 @@ public class Board {
             matrix[row][col].visible = true;
             return true;
         } else {
-            matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, matrix[row][col].number);
+            matrix[row][col] = BoxFactory.createClickedBox(matrix[row][col].number);
             //clickNeighbours( row, col);
         }
         return false;
@@ -137,10 +137,10 @@ public class Board {
         for (int i = rowStart; i <= rowEnd; i++) {
             for (int j = colStart; j <= colEnd; j++) {
                 if (matrix[i][j].number == 0 && !matrix[i][j].visible) {
-                    matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.CLICK, matrix[i][j].number);
+                    matrix[i][j] = BoxFactory.createClickedBox(matrix[i][j].number);
                     clickNeighbours(i, j);
                 } else if (matrix[i][j].number != 10 && !matrix[i][j].visible) {
-                    matrix[i][j] = BoxFactory.createBox(BoxFactory.Type.CLICK, matrix[i][j].number);
+                    matrix[i][j] = BoxFactory.createClickedBox(matrix[i][j].number);
                 }
             }
         }
@@ -150,7 +150,7 @@ public class Board {
     public void setFlagBox( int row, int col) {
         if (!matrix[row][col].visible) {
             int i = matrix[row][col].number;
-            matrix[row][col] = BoxFactory.createBox(BoxFactory.Type.CLICK, i);
+            matrix[row][col] = BoxFactory.createClickedBox(i);
             matrix[row][col].setFlag();
         }
     }

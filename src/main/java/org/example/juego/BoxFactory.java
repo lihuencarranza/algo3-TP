@@ -12,23 +12,23 @@ public class BoxFactory {
     private static final ClickedBox[] clickedBox = new ClickedBox[11];
     private static final FlagBox[] flagBox = new FlagBox[11];
 
-    public Box createBox(int number){
+    public static Box createBox(int number){
         if (box[number] == null)
             box[number] = new Box(number);
         return box[number];
     }
 
-    public BombBox createBomb(){
+    public static BombBox createBomb(){
         return bombBox;
     }
 
-    public ClickedBox createClickedBox(int number){
+    public static ClickedBox createClickedBox(int number){
         if (clickedBox[number] == null)
             clickedBox[number] = new ClickedBox(number);
         return clickedBox[number];
     }
 
-    public FlagBox createFlagBox(int number){
+    public static FlagBox createFlagBox(int number){
         if (flagBox[number] == null) {
             flagBox[number] = new FlagBox(number);
         }
