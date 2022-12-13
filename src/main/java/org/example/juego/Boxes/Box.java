@@ -19,15 +19,11 @@ public class Box {
         this.flag = false;
     }
 
-    public int getNumber() {
-        return number;
-    }
+    public int getNumber() {return number;}
 
     public boolean isABomb() {
         return bomb;
     }
 
-    public boolean isClickable() {
-        return !flag || !visible;
-    }
+    public boolean isClickable() {return !flag && !visible;}
 }

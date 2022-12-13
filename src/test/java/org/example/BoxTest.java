@@ -85,14 +85,12 @@ public class BoxTest {
     public void cantClickAFlag(){
         Box box = new Box(0);
         box.setFlag();
-        boolean i = box.isClickable();
-        assertFalse(i);
+        assertFalse(box.isClickable());
     }
 
     @Test
     public void cantClickAClickedBox(){
         Box box = new ClickedBox(0);
-        boolean i = box.isClickable();
-        assertFalse(i);
+        assertFalse(box.isClickable());
     }
 }
