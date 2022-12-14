@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.example.juego.Game;
-import org.example.juego.Boxes.Box;
 
 public class GameTest {
 

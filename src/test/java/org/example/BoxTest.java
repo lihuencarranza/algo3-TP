@@ -22,7 +22,7 @@ public class BoxTest {
     }
 
     @Test
-    public void bombsFlagisFalse(){
+    public void bombsFlagIsFalse(){
         Box box = new BombBox(10);
         assertFalse(box.flag);
     }
@@ -35,14 +35,14 @@ public class BoxTest {
     }
 
     @Test
-    public void boxNumerIs0()
+    public void boxNumberIs0()
     {
         Box box = new Box(0);
         assertEquals(0, box.getNumber());
     }
 
     @Test
-    public void boxFlagisFalse(){
+    public void boxFlagIsFalse(){
         Box box = new Box(0);
         assertFalse(box.flag);
     }
