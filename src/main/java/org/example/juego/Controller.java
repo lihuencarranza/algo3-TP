@@ -28,6 +28,10 @@ public class Controller {
         return game.board.matrix[row][col].isClickable();
     }
 
+    public boolean isFlagged(int row, int col){
+        return game.board.matrix[row][col].flag;
+    }
+
     public void removeFlag(int row, int col){
         game.board.unsetFlag(row, col);
         this.availableFlags++;

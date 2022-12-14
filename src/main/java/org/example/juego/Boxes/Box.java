@@ -3,7 +3,7 @@ package org.example.juego.Boxes;
 public class Box {
     public boolean visible = false;
     public boolean flag = false;
-    public int number;
+    public final int number;
     public boolean bomb = false;
 
     public Box(int number) {this.number = number;}

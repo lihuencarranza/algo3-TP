@@ -4,7 +4,7 @@ package org.example.juego;
 public class Game{
     public enum State { PLAYING, LOST, WON }
     private State state;
-    public Board board;
+    public final Board board;
     public final int flags = 10;
 
 
@@ -17,12 +17,11 @@ public class Game{
     }
 
     public void setState(boolean b){
+        board.unableAllBoxes();
         if (b) {
             state = State.WON;
-            board.unableAllBoxes();
         }else{
             state = State.LOST;
-            board.unableAllBoxes();
         }
 
     }

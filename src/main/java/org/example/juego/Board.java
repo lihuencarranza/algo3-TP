@@ -4,7 +4,7 @@ import org.example.juego.Boxes.Box;
 import java.util.Random;
 
 public class Board {
-    public Box[][] matrix;
+    public final Box[][] matrix;
     private final int rows = 10;
     private final int columns = 10;
     public int[][] minesList;
