@@ -124,7 +124,10 @@ public class Board {
     public void unsetFlag(int row, int col){
         if (matrix[row][col].flag){
             int i = matrix[row][col].getNumber();
-            matrix[row][col] = BoxFactory.createBox(i);
+            if (i == 10)
+                matrix[row][col] = BoxFactory.createBomb();
+            else
+                matrix[row][col] = BoxFactory.createBox(i);
         }
     }
 

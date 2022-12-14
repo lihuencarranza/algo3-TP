@@ -147,6 +147,8 @@ public class View {
                     break;
 
                 case PRIMARY:
+                    boolean b = controller.isClickable(row,col);
+                    boolean b2 =  controller.hasBomb(row,col);
                     if(controller.isClickable(row,col) && controller.hasBomb(row,col)) {
                         clickAllBombs(row,col);
                         endGame(false);
@@ -251,7 +253,6 @@ public class View {
         clickEmptyBoxes(row,col-1);
         clickEmptyBoxes(row,col+1);
     }
-
 
     private ImageView boxImage(Button b, String string){
         Image image = new Image(string);
