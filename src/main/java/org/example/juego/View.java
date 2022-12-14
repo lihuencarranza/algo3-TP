@@ -147,8 +147,6 @@ public class View {
                     break;
 
                 case PRIMARY:
-                    boolean b = controller.isClickable(row,col);
-                    boolean b2 =  controller.hasBomb(row,col);
                     if(controller.isClickable(row,col) && controller.hasBomb(row,col)) {
                         clickAllBombs(row,col);
                         endGame(false);
