@@ -6,17 +6,10 @@ public class Box {
     public int number;
     public boolean bomb = false;
 
-    public Box(int number) {
-        this.number = number;
-
-    }
+    public Box(int number) {this.number = number;}
 
     public void setFlag() {
         this.flag = true;
-    }
-
-    public void unsetFlag(){
-        this.flag = false;
     }
 
     public int getNumber() {return number;}

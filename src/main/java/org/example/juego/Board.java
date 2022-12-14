@@ -1,15 +1,12 @@
 package org.example.juego;
 
-
-import java.util.Random;
-
 import org.example.juego.Boxes.Box;
+import java.util.Random;
 
 public class Board {
     public Box[][] matrix;
     private final int rows = 10;
     private final int columns = 10;
-
     public int[][] minesList;
 
 
@@ -27,10 +24,8 @@ public class Board {
     }
 
     private int randomNumberCols() {
-
         Random random = new Random();
-
-        return (int) random.nextInt(columns);
+        return random.nextInt(columns);
     }
 
     private void createTable() {
@@ -133,7 +128,4 @@ public class Board {
         }
     }
 
-    public Box getBox(int row, int col) {
-        return matrix[row][col];
-    }
 }

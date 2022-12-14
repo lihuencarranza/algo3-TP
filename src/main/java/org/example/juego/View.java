@@ -90,11 +90,9 @@ public class View {
     private Scene createGameScene() {
 
         controller.startGame();
-        smileButton = new Button();
-        askButton = setAskButton();
-        flagsQButton = new Button();
-        setAskButton();
         setSmileButton();
+        setAskButton();
+        flagsQButton = new Button();
         setFlagQButton();
 
         buttonsMatrix = new Button[10][10];
@@ -309,27 +307,28 @@ public class View {
         return imgView;
     }
 
+    private Button setImageBigButton(String string){
+        Button button = new Button();
+        button.setMinSize(65,65);
+        button.setMaxSize(65,65);
+        button.setGraphic(setBigButtonImage(string));
+        return button;
+    }
+
     private void setSmileButton(){
-        smileButton.setMinSize(65,65);
-        smileButton.setMaxSize(65,65);
-        smileButton.setGraphic(setBigButtonImage("file:src/main/java/org/example/juego/resources/smile.png"));
+        smileButton = setImageBigButton("file:src/main/java/org/example/juego/resources/smile.png");
         smileButton.setOnMouseClicked(event -> {
             scene1 = createGameScene();
             controller.startGame();
             switchScenes(scene1);
-
         });
-
     }
-    private Button setAskButton(){
-        askButton = new Button();
-        askButton.setMinSize(65,65);
-        askButton.setMaxSize(65,65);
-        askButton.setGraphic(setBigButtonImage("file:src/main/java/org/example/juego/resources/ask.png"));
+    private void setAskButton(){
+        askButton = setImageBigButton("file:src/main/java/org/example/juego/resources/ask.png");
         askButton.setOnMouseClicked(e-> stageRules.show());
-        return askButton;
     }
     private void setFlagQButton(){
+        flagsQButton = new Button();
         flagsQButton.setMinSize(70,60);
         flagsQButton.setMaxSize(70,60);
         flagsQButton.setGraphic(flagLeftImage());

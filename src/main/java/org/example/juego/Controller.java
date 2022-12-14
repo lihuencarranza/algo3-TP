@@ -5,12 +5,9 @@ public class Controller {
 
     public int availableFlags;
 
-    public Controller() {
-
-    }
+    public Controller() {}
 
     void startGame(){
-
         game = new Game();
         availableFlags = game.flags;
     }
@@ -43,7 +40,6 @@ public class Controller {
     public boolean hasBomb(int row, int col){return game.board.matrix[row][col].isABomb();}
 
     public void click(int row, int col){game.clickBox(row,col); }
-
 
     public void endGame(boolean b){
         game.setState(b);
